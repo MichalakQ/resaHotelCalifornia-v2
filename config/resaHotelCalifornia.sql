@@ -1,7 +1,14 @@
 DROP DATABASE IF EXISTS resahotelcalifornia ;
 CREATE DATABASE resahotelcalifornia;
 USE resahotelcalifornia;
+-- creation utilisateur 
+CREATE USER IF NOT EXISTS 'username'@'localhost' IDENTIFIED BY 'password';
 
+-- Donner tous les droits à cet utilisateur uniquement sur la base resahotelcalifornia
+GRANT ALL PRIVILEGES ON resahotelcalifornia.* TO 'username'@'localhost';
+
+-- Appliquer les changements
+FLUSH PRIVILEGES;
 -- Création de la table des clients
 
 CREATE TABLE clients (
