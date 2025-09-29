@@ -1,0 +1,26 @@
+{
+  "name": "resahotelcalifornia-v2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichalakQ/resaHotelCalifornia-v2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MichalakQ/resaHotelCalifornia-v2/issues"
+  },
+  "homepage": "https://github.com/MichalakQ/resaHotelCalifornia-v2#readme",
+  "description": "",
+  "dependencies": {
+    "cookie-session": "^2.1.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.1",
+    "semantic-ui-css": "^2.5.0"
+  }
+}
