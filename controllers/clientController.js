@@ -1,22 +1,22 @@
-const Chambre = require('../models/Chambre');
+const Chambre = require('../models/Client');
 
 module.exports = {
   // Liste
   async index(req, res) {
-    const chambres = await Chambre.getAll();
-    res.render('chambres/index', { chambres });
+    const client= await Client.getAll();
+    res.render('client/index', { client });
   },
 
   // Formulaire de création
   createForm(req, res) {
-    res.render('chambres/create');
+    res.render('client/create');
   },
 
   // Création
   async create(req, res) {
     const { numero, capacite } = req.body;
     await Chambre.create({ numero, capacite });
-    res.redirect('/chambres');
+    res.redirect('/client');
   },
 
   // Formulaire d’édition
