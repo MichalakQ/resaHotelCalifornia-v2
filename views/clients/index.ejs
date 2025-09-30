@@ -1,0 +1,20 @@
+<h1>Liste des chambres</h1>
+
+<a href="/chambres/create">➕ Ajouter une chambre</a>
+
+<table border="1" cellpadding="5">
+  <tr><th>ID</th><th>Numéro</th><th>Capacité</th><th>Actions</th></tr>
+  <% chambres.forEach(ch => { %>
+    <tr>
+      <td><%= ch.id %></td>
+      <td><%= ch.numero %></td>
+      <td><%= ch.capacite %></td>
+      <td>
+        <a href="/chambres/<%= ch.id %>/edit">✏️ Modifier</a>
+        <form method="post" action="/chambres/<%= ch.id %>/delete" style="display:inline;">
+          <button type="submit">🗑 Supprimer</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+</table>
