@@ -1,7 +1,7 @@
 // Imports needed for DB connexion
 import mysql from 'mysql2/promise';
 import fs from 'fs'; // FS : FileSystem (lire les fichiers du disque)
-import ini from 'ini'; // INI : Lire le contenu des fichiers au format .ini
+//import ini from 'ini'; // INI : Lire le contenu des fichiers au format .ini
 import path from 'path'; // PATH: Détermine les chemins (working dir)
 import { fileURLToPath } from 'url'; // URL: Convertit les liens en chemin
 // Récupérer le chemin local (file://...) et le répertoire courant (workspace/resaHotelCalifornia2)
