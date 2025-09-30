@@ -4,70 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
-    <title><%= title %></title>
+    <title>Créer un client</title>
 </head>
 <body>
     <div class="ui container" style="margin-top: 2rem;">
-        <h1><%= title %></h1>
-
-        <!-- Affichage des erreurs -->
-        <% if (errors && errors.length > 0) { %>
-            <div class="ui error message">
-                <p>Erreurs :</p>
-                <ul>
-                    <% errors.forEach(function(error) { %>
-                        <li><%= error.msg %></li>
-                    <% }); %>
-                </ul>
-            </div>
-        <% } %>
-
+        <h1>Créer un client</h1>
         <!-- Formulaire -->
         <form class="ui form" method="POST" action="/client">
             <div class="field">
                 <label>Nom</label>
-                <input 
-                    type="text" 
-                    name="nom" 
-                    placeholder="101" 
-                    value="<%= client.nom || '' %>"
+                <input
+                    type="text"
+                    name="nom"
+                    placeholder="Nom du client"
                     required
                 >
             </div>
-
             <div class="field">
-                <label>email</label>
-                <input 
-                    type="text" 
-                    name="email" 
-                    placeholder="2" 
-                    value="<%= client.email || '' %>"
+                <label>Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="adresse email du client"
                     required
                 >
             </div>
+            <div class="field">
+                <label>Téléphone</label>
+                <input
+                    type="tel"
+                    name="telephone"
+                    placeholder="numéro de téléphone "
+                    required
+                >
+            </div>
+            <div class="field">
+                <label>Nombre de personnes</label>
+                <input
+                    type="number"
+                    name="nombre_personnes"
+                    min="0"
+                    placeholder="0"  
+                    required
+                >
+            </div>
+           
+            <!-- Affichage des erreurs -->
 
-            <div class="field"></div>
-                <label>téléphone</label>
-                <input 
-                    type="text" 
-                    name="telephone" 
-                    placeholder="3" 
-                    value="<%= client.telephone || '' %>"
-                    required
-                >
-            </div>
-            
-            <div class="field"></div>
-                <label>nombre_personnes</label>
-                <input 
-                    type="number" 
-                    name="nombre_personnes" 
-                    placeholder="4" 
-                    value="<%= client.nombre_personnes|| '' %>"
-                    required
-                >
-            </div>
-
+            <% if (errors && errors.length > 0) { %>
+                <div class="ui error message">
+                    <p>Erreurs :</p>
+                    <ul>
+                        <% errors.forEach(function(error) { %>
+                            <li><%= error.msg %></li>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% } %>
+           
             <button type="submit" class="ui positive button">Créer</button>
             <a href="/client" class="ui button">Annuler</a>
         </form>
