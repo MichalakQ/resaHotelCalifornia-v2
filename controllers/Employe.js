@@ -14,8 +14,8 @@ module.exports = {
 
   // Création
   async create(req, res) {
-    const { nom, email, telephone, nombre_personnes } = req.body;
-    await Client.create({ nom, email, telephone, nombre_personnes });
+    const {nom, age,date_recrutement, autorisation} = req.body;
+    await Client.create({ nom, age,date_recrutement, autorisation });
     res.redirect('/employe');
   },
 
@@ -27,8 +27,8 @@ module.exports = {
 
   // Modification
   async update(req, res) {
-    const {nom, email, telephone, nombre_personnes} = req.body;
-    await Client.update(req.params.id, {nom, email, telephone, nombre_personnes});
+    const {nom, age,date_recrutement, autorisation} = req.body;
+    await Client.update(req.params.id, {nom, age,date_recrutement, autorisation});
     res.redirect('/employe');
   },
 
