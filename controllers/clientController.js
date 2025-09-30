@@ -15,26 +15,26 @@ module.exports = {
   // Création
   async create(req, res) {
     const { numero, capacite } = req.body;
-    await Chambre.create({ numero, capacite });
+    await Client.create({ numero, capacite });
     res.redirect('/client');
   },
 
   // Formulaire d’édition
   async editForm(req, res) {
-    const chambre = await Chambre.getById(req.params.id);
-    res.render('chambres/edit', { chambre });
+    const client = await Client.getById(req.params.id);
+    res.render('client/edit', { chambre });
   },
 
   // Modification
   async update(req, res) {
     const { numero, capacite } = req.body;
-    await Chambre.update(req.params.id, { numero, capacite });
-    res.redirect('/chambres');
+    await Client.update(req.params.id, { numero, capacite });
+    res.redirect('/client');
   },
 
   // Suppression
   async remove(req, res) {
-    await Chambre.remove(req.params.id);
-    res.redirect('/chambres');
+    await Client.remove(req.params.id);
+    res.redirect('/client');
   }
 };
