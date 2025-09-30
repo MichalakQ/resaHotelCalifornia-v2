@@ -15,20 +15,20 @@ module.exports = {
   // Création
   async create(req, res) {
     const { numero, capacite } = req.body;
-    await Client.create({ numero, capacite });
+    await Client.create({ nom, email, telephone, nombre_personnes });
     res.redirect('/client');
   },
 
   // Formulaire d’édition
   async editForm(req, res) {
     const client = await Client.getById(req.params.id);
-    res.render('client/edit', { chambre });
+    res.render('client/edit', { client });
   },
 
   // Modification
   async update(req, res) {
-    const { numero, capacite } = req.body;
-    await Client.update(req.params.id, { numero, capacite });
+    const { nom, email, telephone, nombre_personnes } = req.body;
+    await Client.update(req.params.id, { nom, email, telephone, nombre_personnes });
     res.redirect('/client');
   },
 
