@@ -1,19 +1,19 @@
 import db from './connexion.js';
-class Client {
+class Reservation {
     constructor(data) {
         this.id = data.id;
-        this.nom = data.nom;
-        this.email = data.email;
-        this.telephone = data.telephone;
-        this.nombre_personnes = data.nombre_personnes;
+        this.clients_id = data.clients_id;
+        this.chambre_id = data.chambre_id;
+        this.date_arrivee = data.date_arrivee;
+        this.date_depart = data.date_depart;
     }
-    // Récupérer toutes les clients
+    // Récupérer toutes les reservations
     static async findAll() {
         try {
-            const [rows] = await db.execute('SELECT * FROM Clients ORDER BY nom');
-            return rows.map(row => new Client(row));
+            const [rows] = await db.execute('SELECT * FROM reservations ORDER BY chambre_id, client_id');
+            return rows.map(row => new Chambre(row));
         } catch (error) {
-            throw new Error('Erreur lors de la récupération des clients: ' + error.message);
+            throw new Error('Erreur lors de la récupération des réservations: ' + error.message);
         }
     }
     // Récupérer une client par ID
@@ -63,7 +63,7 @@ class Client {
     async delete(id) {
         try {
             // Vérifier s'il y a des noms de clients existant
-
+            
             const [clients] = await db.execute(
                 'SELECT COUNT(*) as count FROM client WHERE client_id = ?',
                 [id]
