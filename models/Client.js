@@ -63,6 +63,7 @@ class Client {
     async delete(id) {
         try {
             // Vérifier s'il y a des noms de clients existant
+            
             const [clients] = await db.execute(
                 'SELECT COUNT(*) as count FROM client WHERE client_id = ?',
                 [id]
