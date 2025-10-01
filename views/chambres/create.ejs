@@ -1,55 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
 </head>
+
 <body>
     <div class="ui container" style="margin-top: 2rem;">
-        <h1><%= title %></h1>
-
-        <!-- Affichage des erreurs -->
-        <% if (errors && errors.length > 0) { %>
-            <div class="ui error message">
-                <p>Erreurs :</p>
-                <ul>
-                    <% errors.forEach(function(error) { %>
-                        <li><%= error.msg %></li>
-                    <% }); %>
-                </ul>
-            </div>
-        <% } %>
+        <h1>Création de chambre</h1>
 
         <!-- Formulaire -->
         <form class="ui form" method="POST" action="/chambres">
             <div class="field">
                 <label>Numéro de chambre</label>
-                <input 
-                    type="text" 
-                    name="numero" 
-                    placeholder="101" 
-                    value="<%= chambre.numero || '' %>"
-                    required
-                >
+                <input type="text" name="numero" placeholder="Numéro" required>
             </div>
 
             <div class="field">
                 <label>Capacité</label>
-                <input 
-                    type="number" 
-                    name="capacite" 
-                    placeholder="2" 
-                    min="1"
-                    value="<%= chambre.capacite || '' %>"
-                    required
-                >
+                <input type="number" name="capacite" placeholder="1" min="1" required>
             </div>
 
             <button type="submit" class="ui positive button">Créer</button>
-            <a href="/chambres" class="ui button">Annuler</a>
+            <a href="../accueil.ejs" class="ui button">Annuler</a>
         </form>
     </div>
 </body>
+
 </html>
