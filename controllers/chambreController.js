@@ -1,4 +1,4 @@
-import Chambre from '../models/Chambre';
+import Chambre from '../models/Chambre.js';
 class ChambreController {
 // Afficher la liste des chambres
 static async index(req, res) {
@@ -114,4 +114,4 @@ res.redirect('/chambres');
 }
 }
 }
-module.exports = ChambreController;
+export default ChambreController;
