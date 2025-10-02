@@ -19,6 +19,11 @@ app.get('/', (req, res) => {
         title: 'Hôtel California - Système de Gestion'
     });
 });
+// Configuration du middleware avec exclusion
+app.use('/semantic-ui', express.static(
+    path.join(__dirname, 'node_modules', 'semantic-ui-css'),
+    { fallthrough: true }
+    ));
 // Gestion des erreurs 404
 app.use((req, res) => {
     res.status(404).render('error', {
