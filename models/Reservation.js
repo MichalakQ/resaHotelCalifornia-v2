@@ -93,4 +93,4 @@ class Reservation {
         }
     }
 }
-module.exports = Reservation;
+export default Reservation;

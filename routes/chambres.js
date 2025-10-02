@@ -46,4 +46,4 @@ router.post('/edit', chambreController.update);
 router.post('/delete', chambreController.remove);
 
 // On exporte le routeur pour qu’il soit utilisé dans app.js
-module.exports = router;
+export default router;

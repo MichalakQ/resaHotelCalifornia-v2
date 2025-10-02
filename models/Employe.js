@@ -80,4 +80,4 @@ class Employe {
     // Vérifier la disponibilité d'une chambre
     
 }
-module.exports = Employe;
+export default Employe;
