@@ -3,7 +3,7 @@ const Chambre = require('../models/client');
 module.exports = {
   // Liste
   async index(req, res) {
-    const client= await Client.getAll();
+    const client= await Client.findAll();
     res.render('client/index', { client });
   },
 
