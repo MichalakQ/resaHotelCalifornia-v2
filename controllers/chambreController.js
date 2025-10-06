@@ -1,4 +1,4 @@
-import Chambre from '../models/Chambre';
+import Chambre from '../models/Chambre.js';
 class ChambreController {
     // Afficher la liste des chambres
     static async index(req, res) {
@@ -14,7 +14,7 @@ class ChambreController {
     }
     // Afficher le formulaire de création
     static create(req, res) {
-        res.render('chambres/create', {
+        res.render('chambre/create', {
             title: 'Ajouter une Chambre',
             chambre: {},
             errors: []
