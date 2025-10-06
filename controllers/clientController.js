@@ -1,4 +1,4 @@
-const Chambre = require('../models/Client');
+const Chambre = require('../models/client');
 
 module.exports = {
   // Liste
