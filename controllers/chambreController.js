@@ -14,7 +14,7 @@ class ChambreController {
     }
     // Afficher le formulaire de création
     static create(req, res) {
-        res.render('chambre/create', {
+        res.render('chambres/create', {
             title: 'Ajouter une Chambre',
             chambre: {},
             errors: []
@@ -115,4 +115,4 @@ class ChambreController {
         }
     }
 }
-module.exports = ChambreController;
+export default ChambreController;

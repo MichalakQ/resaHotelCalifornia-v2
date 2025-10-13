@@ -3,34 +3,39 @@ import chambreRoutes from './routes/chambres.js';
 import clientRoutes from './routes/clients.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-// Récupérer le chemin local (file://...) et le répertoire courant (workspace/resaHotelCalifornia2)
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// Configuration EJS
+
+// View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-// Middleware (ajout de la route /public, gestion JSON et URLencoded)
+
+// Middleware
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Route principale
+
+// Home
 app.get('/', (req, res) => {
-    res.render('accueil', {
-        title: 'Hôtel California - Système de Gestion'
-    });
+  res.render('accueil', { title: 'Hôtel California - Système de Gestion' });
 });
-// Gestion des erreurs 404
-app.use((req, res) => {
-    res.status(404).render('error', {
-        title: 'Page non trouvée',
-        error: 'La page demandée n\'existe pas.'
-    });
-});
-app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
-});
-// Routes
+
+// ✅ Mount routes BEFORE 404 handler
 app.use('/chambres', chambreRoutes);
 app.use('/clients', clientRoutes);
+
+// ❗ 404 handler LAST
+app.use((req, res) => {
+  res.status(404).render('error', {
+    title: 'Page non trouvée',
+    error: "La page demandée n'existe pas."
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur http://localhost:${PORT}`);
+});

@@ -1,10 +1,15 @@
-const Chambre = require('../models/client');
+// controllers/clientController.js (ESM)
+import Client from '../models/Client.js'; // ensure exact case + .js
 
-module.exports = {
+const clientController = {
   // Liste
-  async index(req, res) {
-    const client= await Client.findAll();
-    res.render('client/index', { client });
+  async index(req, res, next) {
+    try {
+      const clients = await Client.findAll();
+      res.render('client/index', { clients });
+    } catch (err) {
+      next(err);
+    }
   },
 
   // Formulaire de création
@@ -13,28 +18,52 @@ module.exports = {
   },
 
   // Création
-  async create(req, res) {
-    const { numero, capacite } = req.body;
-    await Client.create({ nom, email, telephone, nombre_personnes });
-    res.redirect('/client');
+  async create(req, res, next) {
+    try {
+      const { nom, email, telephone, nombre_personnes } = req.body;
+      await Client.create({ nom, email, telephone, nombre_personnes });
+      res.redirect('/client');
+    } catch (err) {
+      next(err);
+    }
   },
 
   // Formulaire d’édition
-  async editForm(req, res) {
-    const client = await Client.getById(req.params.id);
-    res.render('client/edit', { client });
+  async editForm(req, res, next) {
+    try {
+      const client = await Client.findByPk(req.params.id);
+      if (!client) return res.status(404).render('errors/404');
+      res.render('client/edit', { client });
+    } catch (err) {
+      next(err);
+    }
   },
 
   // Modification
-  async update(req, res) {
-    const { nom, email, telephone, nombre_personnes } = req.body;
-    await Client.update(req.params.id, { nom, email, telephone, nombre_personnes });
-    res.redirect('/client');
+  async update(req, res, next) {
+    try {
+      const { nom, email, telephone, nombre_personnes } = req.body;
+      const [count] = await Client.update(
+        { nom, email, telephone, nombre_personnes },
+        { where: { id: req.params.id } }
+      );
+      if (!count) return res.status(404).render('errors/404');
+      res.redirect('/client');
+    } catch (err) {
+      next(err);
+    }
   },
 
   // Suppression
-  async remove(req, res) {
-    await Client.remove(req.params.id);
-    res.redirect('/client');
+  async remove(req, res, next) {
+    try {
+      const count = await Client.destroy({ where: { id: req.params.id } });
+      if (!count) return res.status(404).render('errors/404');
+      res.redirect('/client');
+    } catch (err) {
+      next(err);
+    }
   }
 };
+
+export default clientController;

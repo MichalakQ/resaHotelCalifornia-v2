@@ -11,6 +11,7 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "ini": "^5.0.0",
     "mysql2": "^3.15.1",
     "semantic-ui-css": "^2.5.0"
   }

@@ -7,10 +7,10 @@ router.get('/', ChambreController.index);
 
 router.get('/create', ChambreController.create);
 
-router.post('/', chambreValidation, ChambreController.store);
+router.post('/', ChambreController.store);
 
 router.get('/:id/edit', ChambreController.edit);
-router.put('/:id', chambreValidation, ChambreController.update);
+router.put('/:id', ChambreController.update);
 
 router.get('/:id/delete', ChambreController.delete);
 router.delete('/:id', ChambreController.destroy);

@@ -1,5 +1,4 @@
 import db from './connexion.js';
-import db from './db'; 
 class Client {
     constructor(data) {
         this.id = data.id;

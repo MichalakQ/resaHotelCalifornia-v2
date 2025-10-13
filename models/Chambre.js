@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import db from './db'; // Import manquant pour la connexion à la base de données
+import db from './connexion.js'; // Import manquant pour la connexion à la base de données
 
 const router = express.Router();
 
