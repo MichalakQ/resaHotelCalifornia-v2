@@ -1,28 +1,13 @@
-import express from 'express';
-import { body } from 'express-validator';
-import db from './connexion.js'; // Import manquant pour la connexion à la base de données
+import db from './connexion.js';
 
-const router = express.Router();
-
-// Validation des données de chambre
-const chambreValidation = [
-    body('numero')
-        .notEmpty()
-        .withMessage('Le numéro de chambre est obligatoire')
-        .isLength({ min: 1, max: 10 })
-        .withMessage('Le numéro doit faire entre 1 et 10 caractères'),
-    body('capacite')
-        .isInt({ min: 1, max: 50 })
-        .withMessage('La capacité doit être un nombre entre 1 et 50')
-];
-
-// Déclaration de la classe Chambre manquante
 class Chambre {
     constructor(data) {
         this.id = data.id;
         this.numero = data.numero;
-        this.capacite = data.capacite;
-        // Ajoutez d'autres propriétés selon votre schéma de base de données
+        this.type = data.type || null;
+        this.prix = data.prix || null;
+        this.capacite = data.capacite || null;
+        this.disponible = data.disponible !== undefined ? data.disponible : true;
     }
 
     // Récupérer toutes les chambres
@@ -48,10 +33,39 @@ class Chambre {
     // Créer une nouvelle chambre
     static async create(chambreData) {
         try {
-            const [result] = await db.execute(
-                'INSERT INTO chambre (numero, capacite) VALUES (?, ?)',
-                [chambreData.numero, chambreData.capacite]
-            );
+            // Préparer les colonnes et valeurs dynamiquement
+            const columns = ['numero'];
+            const values = [chambreData.numero];
+            const placeholders = ['?'];
+
+            // Ajouter les champs optionnels s'ils existent
+            if (chambreData.type) {
+                columns.push('type');
+                values.push(chambreData.type);
+                placeholders.push('?');
+            }
+
+            if (chambreData.prix) {
+                columns.push('prix');
+                values.push(chambreData.prix);
+                placeholders.push('?');
+            }
+
+            if (chambreData.capacite) {
+                columns.push('capacite');
+                values.push(chambreData.capacite);
+                placeholders.push('?');
+            }
+
+            if (chambreData.disponible !== undefined) {
+                columns.push('disponible');
+                values.push(chambreData.disponible);
+                placeholders.push('?');
+            }
+
+            const query = `INSERT INTO chambre (${columns.join(', ')}) VALUES (${placeholders.join(', ')})`;
+            const [result] = await db.execute(query, values);
+            
             return result.insertId;
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
@@ -64,12 +78,47 @@ class Chambre {
     // Mettre à jour une chambre
     async update(chambreData) {
         try {
-            await db.execute(
-                'UPDATE chambre SET numero = ?, capacite = ? WHERE id = ?',
-                [chambreData.numero, chambreData.capacite, this.id]
-            );
-            this.numero = chambreData.numero;
-            this.capacite = chambreData.capacite;
+            // Préparer les champs à mettre à jour
+            const updates = [];
+            const values = [];
+
+            if (chambreData.numero) {
+                updates.push('numero = ?');
+                values.push(chambreData.numero);
+            }
+
+            if (chambreData.type) {
+                updates.push('type = ?');
+                values.push(chambreData.type);
+            }
+
+            if (chambreData.prix) {
+                updates.push('prix = ?');
+                values.push(chambreData.prix);
+            }
+
+            if (chambreData.capacite) {
+                updates.push('capacite = ?');
+                values.push(chambreData.capacite);
+            }
+
+            if (chambreData.disponible !== undefined) {
+                updates.push('disponible = ?');
+                values.push(chambreData.disponible);
+            }
+
+            values.push(this.id);
+
+            const query = `UPDATE chambre SET ${updates.join(', ')} WHERE id = ?`;
+            await db.execute(query, values);
+
+            // Mettre à jour l'instance
+            if (chambreData.numero) this.numero = chambreData.numero;
+            if (chambreData.type) this.type = chambreData.type;
+            if (chambreData.prix) this.prix = chambreData.prix;
+            if (chambreData.capacite) this.capacite = chambreData.capacite;
+            if (chambreData.disponible !== undefined) this.disponible = chambreData.disponible;
+
             return true;
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
@@ -79,7 +128,7 @@ class Chambre {
         }
     }
 
-    // Supprimer une chambre
+    // Supprimer une chambre (méthode statique)
     static async delete(id) {
         try {
             // Vérifier s'il y a des réservations associées
@@ -87,9 +136,11 @@ class Chambre {
                 'SELECT COUNT(*) as count FROM reservation WHERE chambre_id = ?',
                 [id]
             );
+            
             if (reservations[0].count > 0) {
                 throw new Error('Impossible de supprimer la chambre : des réservations sont associées');
             }
+            
             await db.execute('DELETE FROM chambre WHERE id = ?', [id]);
             return true;
         } catch (error) {
@@ -110,6 +161,7 @@ class Chambre {
                     OR (date_debut >= ? AND date_fin <= ?)
                 )
             `, [chambreId, dateDebut, dateDebut, dateFin, dateFin, dateDebut, dateFin]);
+            
             return rows[0].count === 0;
         } catch (error) {
             throw new Error("Erreur lors de la vérification de la disponibilité de la chambre: " + error.message);

@@ -76,12 +76,16 @@ class ChambreController {
     // Traiter la mise à jour d'une chambre
     static async update(req, res) {
         try {
-            const uneChambre = await Chambre.findById(req.params.id);
-            if (uneChambre) {
-                await Chambre.update(req.body);
+            const chambre = await Chambre.findById(req.params.id);
+            if (!chambre) {
+                return res.redirect('/chambres');
             }
+            
+            // Mise à jour de la chambre avec l'instance
+            await chambre.update(req.body);
             res.redirect('/chambres');
         } catch (error) {
+            console.error('Erreur lors de la mise à jour de la chambre:', error);
             res.redirect('/chambres');
         }
     }
@@ -97,20 +101,19 @@ class ChambreController {
                 chambre: chambre
             });
         } catch (error) {
+            console.error('Erreur lors de la récupération de la chambre:', error);
             res.redirect('/chambres');
         }
     }
+
     // Traiter la suppression d'une chambre
     static async destroy(req, res) {
         try {
-            const chambre = await Chambre.findById(req.params.id);
-            if (!chambre) {
-                return res.redirect('/chambres');
-            }
-            await chambre.delete(req.params.id);
+            // Utilisation de la méthode statique delete
+            await Chambre.delete(req.params.id);
             res.redirect('/chambres');
         } catch (error) {
-            req.session.messages = [{ type: 'error', text: error.message }];
+            console.error('Erreur lors de la suppression de la chambre:', error);
             res.redirect('/chambres');
         }
     }
