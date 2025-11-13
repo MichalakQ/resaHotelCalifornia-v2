@@ -1,6 +1,6 @@
-const Chambre = require('../models/Employe');
+import Employe from '../models/employe.js';
 
-module.exports = {
+export default  {
   // Liste
   async index(req, res) {
     const employe= await Employe.getAll();
@@ -15,7 +15,7 @@ module.exports = {
   // Création
   async create(req, res) {
     const {nom, age,date_recrutement, autorisation} = req.body;
-    await Client.create({ nom, age,date_recrutement, autorisation });
+    await Employe.create({ nom, age, date_recrutement, autorisation });
     res.redirect('/employe');
   },
 
@@ -28,13 +28,13 @@ module.exports = {
   // Modification
   async update(req, res) {
     const {nom, age,date_recrutement, autorisation} = req.body;
-    await Client.update(req.params.id, {nom, age,date_recrutement, autorisation});
+    await Employe.update(req.params.id, {nom, age, date_recrutement, autorisation });
     res.redirect('/employe');
   },
 
   // Suppression
   async remove(req, res) {
-    await Client.remove(req.params.id);
+    await Employe.delete(req.params.id);
     res.redirect('/employe');
   }
 };

@@ -84,12 +84,10 @@ class ChambreController {
             if (!chambre) {
                 return res.redirect('/chambres');
             }
-            
-            // Mise à jour de la chambre avec l'instance
-            await chambre.update(req.body);
+            await chambre.update(req.body);  // ✅ Appel d'instance
             res.redirect('/chambres');
         } catch (error) {
-            console.error('Erreur lors de la mise à jour de la chambre:', error);
+            console.error('Erreur update:', error);
             res.redirect('/chambres');
         }
     }
