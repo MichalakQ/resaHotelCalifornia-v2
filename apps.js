@@ -3,6 +3,8 @@ import chambreRoutes from './routes/chambres.js';
 import clientRoutes from './routes/clients.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import methodOverride from 'method-override';
+app.use(methodOverride('_method'));
 
 const app = express();
 const PORT = process.env.PORT || 3000;

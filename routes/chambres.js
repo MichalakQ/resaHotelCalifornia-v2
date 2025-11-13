@@ -10,8 +10,8 @@ router.get('/create', ChambreController.create);
 router.post('/', ChambreController.store);
 
 router.get('/:id/edit', ChambreController.edit);
-router.put('/:id', ChambreController.update);
+router.post('/:id', ChambreController.update);
 
 router.get('/:id/delete', ChambreController.delete);
-router.delete('/:id', ChambreController.destroy);
+router.post('/:id', ChambreController.destroy);
 export default router;

@@ -14,11 +14,20 @@ class ChambreController {
     }
     // Afficher le formulaire de création
     static create(req, res) {
-        res.render('chambres/create', {
-            title: 'Ajouter une Chambre',
-            chambre: {},
-            errors: []
-        });
+        try {
+            res.render('chambres/create', {
+                title: 'Ajouter une Chambre',
+                chambre: {},
+                errors: []
+            });
+        } catch (error) {
+            console.error('Erreur lors de l\'affichage du formulaire:', error);
+            res.render('chambres/create', {
+                title: 'Ajouter une Chambre',
+                chambre: {},  // ✅ Corrigé : {} au lieu de req.body (car GET n'a pas de body)
+                errors: [{ msg: 'Erreur lors de l\'affichage du formulaire' }]
+            });
+        }
     }
     // Traiter la création d'une chambre
     static async store(req, res) {

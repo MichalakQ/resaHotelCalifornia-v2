@@ -46,7 +46,7 @@ class Client {
     }
 
     // Mettre à jour un client
-    async update(clientData) {
+    static async update(clientData) {
         try {
             await db.execute(
                 'UPDATE client SET nom = ?, email = ?, telephone = ?, nombre_personnes = ? WHERE id = ?',

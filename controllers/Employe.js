@@ -3,7 +3,7 @@ import Employe from '../models/employe.js';
 export default  {
   // Liste
   async index(req, res) {
-    const employe= await Employe.getAll();
+    const employes = await Employe.findAll();
     res.render('employe/index', { employe });
   },
 
@@ -21,7 +21,7 @@ export default  {
 
   // Formulaire d’édition
   async editForm(req, res) {
-    const employe = await Employe.getById(req.params.id);
+    const employe = await Employe.findById(req.params.id);
     res.render('employe/edit', { employe });
   },
 
