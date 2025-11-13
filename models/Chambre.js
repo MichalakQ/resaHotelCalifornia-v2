@@ -76,7 +76,7 @@ class Chambre {
     }
 
     // Mettre à jour une chambre
-    static async update(chambreData) {
+ async update(chambreData) {
         try {
             // Préparer les champs à mettre à jour
             const updates = [];
