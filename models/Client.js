@@ -1,4 +1,5 @@
 import db from './connexion.js';
+
 class Client {
     constructor(data) {
         this.id = data.id;
@@ -7,25 +8,28 @@ class Client {
         this.telephone = data.telephone;
         this.nombre_personnes = data.nombre_personnes;
     }
-    // Récupérer toutes les clients
+
+    // Récupérer tous les clients
     static async findAll() {
         try {
-            const [rows] = await db.execute('SELECT * FROM Clients ORDER BY nom');
+            const [rows] = await db.execute('SELECT * FROM client ORDER BY nom');
             return rows.map(row => new Client(row));
         } catch (error) {
             throw new Error('Erreur lors de la récupération des clients: ' + error.message);
         }
     }
-    // Récupérer une client par ID
+
+    // Récupérer un client par ID
     static async findById(id) {
         try {
-            const [rows] = await db.execute('SELECT * FROM clients WHERE id = ?', [id]);
+            const [rows] = await db.execute('SELECT * FROM client WHERE id = ?', [id]);
             return rows.length > 0 ? new Client(rows[0]) : null;
         } catch (error) {
-            throw new Error('Erreur lors de la récupération de la client: ' + error.message);
+            throw new Error('Erreur lors de la récupération du client: ' + error.message);
         }
     }
-    // Créer un nouveaux client
+
+    // Créer un nouveau client
     static async create(clientData) {
         try {
             const [result] = await db.execute(
@@ -40,11 +44,12 @@ class Client {
             throw new Error('Erreur lors de la création du client: ' + error.message);
         }
     }
-    // Mettre à jour une chambre
+
+    // Mettre à jour un client
     async update(clientData) {
         try {
             await db.execute(
-                'UPDATE client SET nom = ?, email = ?, telephone = ?, nombre_personnes = ?,  WHERE id = ?',
+                'UPDATE client SET nom = ?, email = ?, telephone = ?, nombre_personnes = ? WHERE id = ?',
                 [clientData.nom, clientData.email, clientData.telephone, clientData.nombre_personnes, this.id]
             );
             this.nom = clientData.nom;
@@ -59,37 +64,37 @@ class Client {
             throw new Error('Erreur lors de la mise à jour du client: ' + error.message);
         }
     }
-    // Supprimer un client
-    async delete(id) {
-        try {
-            // Vérifier s'il y a des noms de clients existant
 
-            const [clients] = await db.execute(
-                'SELECT COUNT(*) as count FROM client WHERE client_id = ?',
+    // Supprimer un client
+    static async delete(id) {
+        try {
+            // Vérifier s'il y a des réservations associées
+            const [reservations] = await db.execute(
+                'SELECT COUNT(*) as count FROM reservation WHERE client_id = ?',
                 [id]
             );
-            if (clients[0].count > 0) {
-                throw new Error('Impossible de supprimer le nom des clients sont associées');
+            if (reservations[0].count > 0) {
+                throw new Error('Impossible de supprimer le client : des réservations sont associées');
             }
-            await db.execute('DELETE FROM clients WHERE id = ?', [id]);
+            await db.execute('DELETE FROM client WHERE id = ?', [id]);
             return true;
         } catch (error) {
             throw new Error('Erreur lors de la suppression du client: ' + error.message);
         }
     }
-    // Vérifier l'existance d'un client
-    static async isAvailable(clientsId, email, telephone, nombre_personnes) {
+
+    // Vérifier si un client existe par email
+    static async existsByEmail(email) {
         try {
-            const [rows] = await db.execute(`
-    SELECT COUNT(*) as count 
-    FROM clients
-    WHERE clients_id = ?
-    
-    `, [clientsId]);
-            return rows[0].count === 0;
+            const [rows] = await db.execute(
+                'SELECT COUNT(*) as count FROM client WHERE email = ?',
+                [email]
+            );
+            return rows[0].count > 0;
         } catch (error) {
-            throw new Error("Erreur lors de la vérification de l'existance du client: " + error.message);
+            throw new Error("Erreur lors de la vérification de l'existence du client: " + error.message);
         }
     }
 }
+
 export default Client;
