@@ -23,6 +23,7 @@ class ChambreController {
     // Traiter la création d'une chambre
     static async store(req, res) {
         try {
+            console.log("creation go brrr")
             // Validation manuelle des données
             const errors = [];
             // Vérification des champs requis
