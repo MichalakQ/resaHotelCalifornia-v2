@@ -51,6 +51,9 @@ class ChambreController {
             await Chambre.create(req.body);
             res.redirect('/chambres');
         } catch (error) {
+            console.log("creation pas glop")
+            console.log(error.message)
+    
             res.render('chambres/create', {
                 title: 'Ajouter une Chambre',
                 chambre: req.body,
