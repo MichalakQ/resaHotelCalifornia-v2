@@ -3,7 +3,9 @@ import chambreRoutes from './routes/chambres.js';
 import clientRoutes from './routes/clients.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import methodOverride from 'method-override';
 
+// ✅ CORRECTION #1 : Créer app AVANT de l'utiliser
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -18,17 +20,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));  // ✅ Maintenant app existe
 
 // Home
 app.get('/', (req, res) => {
   res.render('accueil', { title: 'Hôtel California - Système de Gestion' });
 });
 
-// ✅ Mount routes BEFORE 404 handler
+// Mount routes BEFORE 404 handler
 app.use('/chambres', chambreRoutes);
 app.use('/clients', clientRoutes);
 
-// ❗ 404 handler LAST
+// 404 handler LAST
 app.use((req, res) => {
   res.status(404).render('error', {
     title: 'Page non trouvée',
@@ -36,6 +39,7 @@ app.use((req, res) => {
   });
 });
 
+// ✅ CORRECTION #2 : Syntaxe correcte pour template literal
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });

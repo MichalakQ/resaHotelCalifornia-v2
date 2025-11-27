@@ -14,15 +14,25 @@ class ChambreController {
     }
     // Afficher le formulaire de création
     static create(req, res) {
-        res.render('chambres/create', {
-            title: 'Ajouter une Chambre',
-            chambre: {},
-            errors: []
-        });
+        try {
+            res.render('chambres/create', {
+                title: 'Ajouter une Chambre',
+                chambre: {},
+                errors: []
+            });
+        } catch (error) {
+            console.error('Erreur lors de l\'affichage du formulaire:', error);
+            res.render('chambres/create', {
+                title: 'Ajouter une Chambre',
+                chambre: {},  // ✅ Corrigé : {} au lieu de req.body (car GET n'a pas de body)
+                errors: [{ msg: 'Erreur lors de l\'affichage du formulaire' }]
+            });
+        }
     }
     // Traiter la création d'une chambre
     static async store(req, res) {
         try {
+            console.log("creation go brrr")
             // Validation manuelle des données
             const errors = [];
             // Vérification des champs requis
@@ -50,6 +60,9 @@ class ChambreController {
             await Chambre.create(req.body);
             res.redirect('/chambres');
         } catch (error) {
+            console.log("creation pas glop")
+            console.log(error.message)
+    
             res.render('chambres/create', {
                 title: 'Ajouter une Chambre',
                 chambre: req.body,
@@ -76,12 +89,14 @@ class ChambreController {
     // Traiter la mise à jour d'une chambre
     static async update(req, res) {
         try {
-            const uneChambre = await Chambre.findById(req.params.id);
-            if (uneChambre) {
-                await Chambre.update(req.body);
+            const chambre = await Chambre.findById(req.params.id);
+            if (!chambre) {
+                return res.redirect('/chambres');
             }
+            await chambre.update(req.body);  // ✅ Appel d'instance
             res.redirect('/chambres');
         } catch (error) {
+            console.error('Erreur update:', error);
             res.redirect('/chambres');
         }
     }
@@ -97,20 +112,19 @@ class ChambreController {
                 chambre: chambre
             });
         } catch (error) {
+            console.error('Erreur lors de la récupération de la chambre:', error);
             res.redirect('/chambres');
         }
     }
+
     // Traiter la suppression d'une chambre
     static async destroy(req, res) {
         try {
-            const chambre = await Chambre.findById(req.params.id);
-            if (!chambre) {
-                return res.redirect('/chambres');
-            }
-            await chambre.delete(req.params.id);
+            // Utilisation de la méthode statique delete
+            await Chambre.delete(req.params.id);
             res.redirect('/chambres');
         } catch (error) {
-            req.session.messages = [{ type: 'error', text: error.message }];
+            console.error('Erreur lors de la suppression de la chambre:', error);
             res.redirect('/chambres');
         }
     }
