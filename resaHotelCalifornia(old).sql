@@ -1,8 +1,7 @@
-DROP DATABASE IF EXISTS resahotelcalifornia;
+DROP DATABASE IF EXISTS resahotelcalifornia ;
 CREATE DATABASE resahotelcalifornia;
 USE resahotelcalifornia;
-
--- Création utilisateur
+-- creation utilisateur 
 CREATE USER IF NOT EXISTS 'username'@'localhost' IDENTIFIED BY 'password';
 
 -- Donner tous les droits à cet utilisateur uniquement sur la base resahotelcalifornia
@@ -10,22 +9,22 @@ GRANT ALL PRIVILEGES ON resahotelcalifornia.* TO 'username'@'localhost';
 
 -- Appliquer les changements
 FLUSH PRIVILEGES;
-
 -- Création de la table des clients
+
 CREATE TABLE clients (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     telephone VARCHAR(20) NOT NULL,
     nombre_personnes INT NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Création de la table des chambres (avec colonnes supplémentaires)
+-- Création de la table des chambres
 CREATE TABLE chambres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero VARCHAR(10) NOT NULL UNIQUE,
     capacite INT NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Création de la table des réservations
 CREATE TABLE reservations (
@@ -36,12 +35,11 @@ CREATE TABLE reservations (
     date_depart DATE NOT NULL,
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
     FOREIGN KEY (chambre_id) REFERENCES chambres(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Ajout d'un index pour accélérer les recherches de disponibilité
 CREATE INDEX idx_reservation_dates ON reservations(chambre_id, date_arrivee, date_depart);
-
--- Valeurs chambres (avec type et prix)
+-- Valeur chambres
 INSERT INTO chambres (numero, capacite) VALUES
 ('101', 2),
 ('102', 2),
@@ -50,11 +48,10 @@ INSERT INTO chambres (numero, capacite) VALUES
 ('202', 2),
 ('203', 4),
 ('301', 2),
-('302', 3),  -- ✅ Virgule manquante ajoutée
+('302', 3),
 ('401', 4),
 ('402', 1);
-
--- Valeur clients
+-- valeur client
 INSERT INTO clients (nom, email, telephone, nombre_personnes) VALUES
 ('Jean Dupont', 'jean.dupont@email.com', '0612345678', 2),
 ('Marie Martin', 'marie.martin@email.com', '0687654321', 3),
@@ -64,10 +61,8 @@ INSERT INTO clients (nom, email, telephone, nombre_personnes) VALUES
 ('Émilie Moreau', 'emilie.moreau@email.com', '0676543210', 1),
 ('François Petit', 'francois.petit@email.com', '0645678912', 2),
 ('Isabelle Roux', 'isabelle.roux@email.com', '0698765432', 3);
-
--- Valeurs réservations
+-- valeurs reservations
 -- Date au format YYYY-MM-DD
-
 -- Réservations passées
 INSERT INTO reservations (client_id, chambre_id, date_arrivee, date_depart) VALUES
 (1, 1, '2024-01-15', '2024-01-20'),
@@ -85,12 +80,12 @@ INSERT INTO reservations (client_id, chambre_id, date_arrivee, date_depart) VALU
 (7, 5, '2025-06-15', '2025-06-22'),
 (8, 9, '2025-07-01', '2025-07-10');
 
--- Multiples réservations pour la même chambre (à différentes dates)
+-- Multiple réservations pour la même chambre (à différentes dates)
 INSERT INTO reservations (client_id, chambre_id, date_arrivee, date_depart) VALUES
 (1, 1, '2025-05-10', '2025-05-15'),
 (2, 1, '2025-06-20', '2025-06-25');
 
--- Multiples réservations pour le même client (différentes chambres)
+-- Multiple réservations pour le même client (différentes chambres)
 INSERT INTO reservations (client_id, chambre_id, date_arrivee, date_depart) VALUES
 (4, 7, '2025-08-05', '2025-08-12'),
 (4, 10, '2025-10-10', '2025-10-15');
