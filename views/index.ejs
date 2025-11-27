@@ -1,20 +1,143 @@
-<h1>Liste des chambres</h1>
+<!DOCTYPE html>
+<html lang="fr">
 
-<a href="/chambres/create">➕ Ajouter une chambre</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
+    <title><%= title %></title>
+</head>
 
-<table border="1" cellpadding="5">
-  <tr><th>ID</th><th>Numéro</th><th>Capacité</th><th>Actions</th></tr>
-  <% chambres.forEach(ch => { %>
-    <tr>
-      <td><%= ch.id %></td>
-      <td><%= ch.numero %></td>
-      <td><%= ch.capacite %></td>
-      <td>
-        <a href="/chambres/<%= ch.id %>/edit">✏️ Modifier</a>
-        <form method="post" action="/chambres/<%= ch.id %>/delete" style="display:inline;">
-          <button type="submit">🗑 Supprimer</button>
-        </form>
-      </td>
-    </tr>
-  <% }) %>
-</table>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <h1 class="ui header">
+            <i class="bed icon"></i>
+            <div class="content">
+                <%= title %>
+                <div class="sub header">Liste de toutes les chambres de l'hôtel</div>
+            </div>
+        </h1>
+
+        <!-- Bouton pour ajouter une chambre -->
+        <div style="margin-bottom: 1.5rem;">
+            <a href="/chambres/create" class="ui primary button">
+                <i class="plus icon"></i>
+                Ajouter une chambre
+            </a>
+            <a href="/" class="ui button">
+                <i class="home icon"></i>
+                Retour à l'accueil
+            </a>
+        </div>
+
+        <!-- Affichage des chambres -->
+        <% if (chambres && chambres.length > 0) { %>
+            <table class="ui celled table">
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Capacité</th>
+                        <th class="center aligned">Type</th>
+                        <th class="center aligned">Prix</th>
+                        <th class="center aligned">Disponibilité</th>
+                        <th class="center aligned">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% chambres.forEach(chambre => { %>
+                    <tr>
+                        <td>
+                            <strong><%= chambre.numero %></strong>
+                        </td>
+                        <td>
+                            <i class="user icon"></i>
+                            <%= chambre.capacite %> personne(s)
+                        </td>
+                        <td class="center aligned">
+                            <% if (chambre.type) { %>
+                                <%= chambre.type %>
+                            <% } else { %>
+                                <span class="ui grey text">-</span>
+                            <% } %>
+                        </td>
+                        <td class="center aligned">
+                            <% if (chambre.prix) { %>
+                                <strong><%= chambre.prix %> €</strong>
+                            <% } else { %>
+                                <span class="ui grey text">-</span>
+                            <% } %>
+                        </td>
+                        <td class="center aligned">
+                            <% if (chambre.disponible) { %>
+                                <span class="ui green label">Disponible</span>
+                            <% } else { %>
+                                <span class="ui red label">Occupée</span>
+                            <% } %>
+                        </td>
+                        <td class="center aligned">
+                            <div class="ui small buttons">
+                                <a href="/chambres/<%= chambre.id %>/edit" class="ui blue button" title="Modifier">
+                                    <i class="edit icon"></i>
+                                </a>
+                                <a href="/chambres/<%= chambre.id %>/delete" class="ui red button" title="Supprimer">
+                                    <i class="trash icon"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+
+            <!-- Statistiques -->
+            <div class="ui segment">
+                <div class="ui statistics">
+                    <div class="statistic">
+                        <div class="value">
+                            <%= chambres.length %>
+                        </div>
+                        <div class="label">
+                            Chambre(s) au total
+                        </div>
+                    </div>
+                    <div class="statistic">
+                        <div class="value">
+                            <%= chambres.filter(c => c.disponible).length %>
+                        </div>
+                        <div class="label">
+                            Disponible(s)
+                        </div>
+                    </div>
+                    <div class="statistic">
+                        <div class="value">
+                            <%= chambres.filter(c => !c.disponible).length %>
+                        </div>
+                        <div class="label">
+                            Occupée(s)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <% } else { %>
+            <!-- Message si aucune chambre -->
+            <div class="ui icon message">
+                <i class="inbox icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Aucune chambre enregistrée
+                    </div>
+                    <p>Commencez par ajouter une première chambre.</p>
+                    <a href="/chambres/create" class="ui primary button" style="margin-top: 1rem;">
+                        <i class="plus icon"></i>
+                        Ajouter une chambre
+                    </a>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="/semantic-ui/semantic.min.js"></script>
+</body>
+
+</html>
