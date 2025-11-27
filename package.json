@@ -1,16 +1,16 @@
 {
   "name": "resa-hotel-california",
   "version": "1.0.0",
-  "main": "apps.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node apps.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "cookie-session": "^2.1.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "express-validator": "^7.2.1",
+    "express-validator": "^7.3.1",
     "ini": "^5.0.0",
     "method-override": "^3.0.0",
     "mysql2": "^3.15.1",
