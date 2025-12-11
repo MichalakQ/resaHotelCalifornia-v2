@@ -24,7 +24,7 @@ class Chambre {
 
     // Récupérer une chambre par ID
     static async findById(id) {
-        console.log('🔍 Chambre.findById() appelé avec id:', id);
+        console.log('Chambre.findById() appelé avec id:', id);
         try {
             const [rows] = await db.execute('SELECT * FROM chambres WHERE id = ?', [id]);
             console.log('Résultat findById:', rows.length > 0 ? 'Trouvée' : 'Non trouvée');
