@@ -22,11 +22,11 @@ try {
     }
 } catch (error) {
     if (error.code === 'ENOENT') {
-        console.error('❌ ERREUR: Le fichier config/DB.ini est introuvable.');
-        console.error('📁 Chemin recherché:', path.join(__dirname, '../config/DB.ini'));
-        console.error('💡 Solution: Créez le dossier "config" à la racine du projet et ajoutez-y le fichier DB.ini');
+        console.error('ERREUR: Le fichier config/DB.ini est introuvable.');
+        console.error('Chemin recherché:', path.join(__dirname, '../config/DB.ini'));
+        console.error('Solution: Créez le dossier "config" à la racine du projet et ajoutez-y le fichier DB.ini');
     } else {
-        console.error('❌ ERREUR lors de la lecture de la configuration:', error.message);
+        console.error('ERREUR lors de la lecture de la configuration:', error.message);
     }
     process.exit(1);
 }
@@ -52,20 +52,20 @@ const pool = mysql.createPool({
 (async () => {
     try {
         const connection = await pool.getConnection();
-        console.log('✅ Connexion à la base de données réussie');
-        console.log(`📊 Base de données: ${dbConfig.database}`);
-        console.log(`🖥️  Serveur: ${dbConfig.host}`);
+        console.log('Connexion à la base de données réussie');
+        console.log(`Base de données: ${dbConfig.database}`);
+        console.log(`Serveur: ${dbConfig.host}`);
         connection.release();
     } catch (error) {
-        console.error('❌ ERREUR de connexion à la base de données:');
+        console.error('ERREUR de connexion à la base de données:');
         console.error('Message:', error.message);
         
         if (error.code === 'ECONNREFUSED') {
-            console.error('💡 Le serveur MySQL n\'est pas accessible. Vérifiez qu\'il est démarré.');
+            console.error('Le serveur MySQL n\'est pas accessible. Vérifiez qu\'il est démarré.');
         } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
-            console.error('💡 Accès refusé. Vérifiez le nom d\'utilisateur et le mot de passe dans config/DB.ini');
+            console.error('Accès refusé. Vérifiez le nom d\'utilisateur et le mot de passe dans config/DB.ini');
         } else if (error.code === 'ER_BAD_DB_ERROR') {
-            console.error('💡 La base de données n\'existe pas. Exécutez d\'abord le script SQL pour créer la base.');
+            console.error('La base de données n\'existe pas. Exécutez d\'abord le script SQL pour créer la base.');
         }
         
         process.exit(1);
