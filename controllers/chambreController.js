@@ -12,7 +12,7 @@ class ChambreController {
                 chambres: chambres
             });
         } catch (error) {
-            console.error('❌ Erreur index:', error.message);
+            console.error('Erreur index:', error.message);
             res.redirect('/');
         }
     }
@@ -29,7 +29,7 @@ class ChambreController {
             });
             console.log('✅ Vue Chambre/create rendue avec succès');
         } catch (error) {
-            console.error('❌ Erreur lors de l\'affichage du formulaire:', error);
+            console.error('Erreur lors de l\'affichage du formulaire:', error);
             res.render('Chambre/create', {
                 title: 'Ajouter une Chambre',
                 chambre: {},
@@ -40,7 +40,7 @@ class ChambreController {
     
     // Traiter la création d'une chambre
     static async store(req, res) {
-        console.log('💾 ChambreController.store() appelé (POST)');
+        console.log('ChambreController.store() appelé (POST)');
         console.log('📝 Données reçues:', req.body);
         try {
             const errors = [];
