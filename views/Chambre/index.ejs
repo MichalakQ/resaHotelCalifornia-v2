@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <link rel="icon" href="data:,">
+    <title>Liste des chambres</title>
+</head>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <!-- En-tête -->
+        <div class="ui stackable grid">
+            <div class="ten wide column">
+                <h1 class="ui header">
+                    <i class="bed icon"></i>
+                    <div class="content">
+                        Gestion des Chambres
+                        <div class="sub header">Liste de toutes les chambres de l'hôtel</div>
+                    </div>
+                </h1>
+            </div>
+            <div class="six wide column" style="text-align: right;">
+                <a href="/chambres/create" class="ui primary button">
+                    <i class="plus icon"></i>
+                    Nouvelle chambre
+                </a>
+                <a href="/" class="ui button">
+                    <i class="home icon"></i>
+                    Accueil
+                </a>
+            </div>
+        </div>
+
+        <div class="ui divider"></div>
+
+        <!-- Message si aucune chambre -->
+        <% if (chambres.length === 0) { %>
+            <div class="ui info message">
+                <div class="header">Aucune chambre enregistrée</div>
+                <p>Commencez par créer votre première chambre.</p>
+            </div>
+        <% } else { %>
+            <!-- Statistiques -->
+            <div class="ui three statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <%= chambres.length %>
+                    </div>
+                    <div class="label">Chambres</div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <%= chambres.reduce((sum, c) => sum + c.capacite, 0) %>
+                    </div>
+                    <div class="label">Capacité totale</div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <%= Math.round(chambres.reduce((sum, c) => sum + c.capacite, 0) / chambres.length) %>
+                    </div>
+                    <div class="label">Capacité moyenne</div>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <!-- Tableau des chambres -->
+            <table class="ui celled striped table">
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Capacité</th>
+                        <th>Statut</th>
+                        <th class="center aligned">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% chambres.forEach(function(chambre) { %>
+                        <tr>
+                            <td>
+                                <h4 class="ui header">
+                                    <i class="door open icon"></i>
+                                    <div class="content">
+                                        Chambre <%= chambre.numero %>
+                                    </div>
+                                </h4>
+                            </td>
+                            <td>
+                                <i class="user icon"></i>
+                                <%= chambre.capacite %> personne(s)
+                            </td>
+                            <td>
+                                <% if (chambre.disponible === true || chambre.disponible === 1) { %>
+                                    <div class="ui green label">
+                                        <i class="check icon"></i>
+                                        Disponible
+                                    </div>
+                                <% } else { %>
+                                    <div class="ui red label">
+                                        <i class="lock icon"></i>
+                                        Occupée
+                                    </div>
+                                <% } %>
+                            </td>
+                            <td class="center aligned">
+                                <div class="ui small buttons">
+                                    <a href="/chambres/<%= chambre.id %>/edit" class="ui primary button">
+                                        <i class="edit icon"></i>
+                                        Modifier
+                                    </a>
+                                    <a href="/chambres/<%= chambre.id %>/delete" class="ui red button">
+                                        <i class="trash icon"></i>
+                                        Supprimer
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+</body>
+</html>

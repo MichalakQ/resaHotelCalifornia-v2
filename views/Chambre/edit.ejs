@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
+    
+    <title>Modifier la chambre</title>
+</head>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <h1>Modifier la chambre <%= chambre.numero %></h1>
+        
+        <!-- Affichage des erreurs -->
+        <% if (locals.errors && errors.length > 0) { %>
+            <div class="ui error message">
+                <div class="header">Erreurs :</div>
+                <ul class="list">
+                    <% errors.forEach(function(error) { %>
+                        <li><%= error.msg %></li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
+        
+        <!-- Formulaire -->
+        <form class="ui form" method="POST" action="/chambres/<%= chambre.id %>?_method=PUT">
+            <div class="field">
+                <label>Numéro de chambre</label>
+                <input type="text" name="numero" placeholder="Numéro" value="<%= chambre.numero %>" required>
+            </div>
+            <div class="field">
+                <label>Capacité</label>
+                <input type="number" name="capacite" placeholder="1" min="1" value="<%= chambre.capacite %>" required>
+            </div>
+            <button type="submit" class="ui primary button">
+                <i class="save icon"></i>
+                Mettre à jour
+            </button>
+            <a href="/chambres" class="ui button">
+                <i class="cancel icon"></i>
+                Annuler
+            </a>
+        </form>
+    </div>
+</body>
+</html>
