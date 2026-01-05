@@ -1,4 +1,5 @@
 import express from 'express';
+import helmet from 'helmet'; 
 import chambreRoutes from './routes/chambres.js';
 import clientRoutes from './routes/clients.js';
 import path from 'path';
@@ -39,7 +40,7 @@ app.use((req, res) => {
   });
 });
 
-// ✅ CORRECTION #2 : Syntaxe correcte pour template literal
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur http://localhost:${PORT}`);
+//          
 });

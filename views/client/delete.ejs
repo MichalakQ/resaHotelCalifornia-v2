@@ -13,7 +13,7 @@
         <h1 class="ui red header">
             <i class="warning sign icon"></i>
             <div class="content">
-                Supprimer la Chambre
+                Supprimer le client
             </div>
         </h1>
 
@@ -25,7 +25,7 @@
             <p>Vous êtes sur le point de supprimer définitivement ce client. Cette action est irréversible.</p>
         </div>
 
-        <!-- Informations de la chambre à supprimer -->
+        <!-- Informations du client à supprimer -->
         <div class="ui segment">
             <h3 class="ui header">Détails de la chambre</h3>
             <table class="ui definition table">
@@ -36,18 +36,18 @@
                     </tr>
                     <tr>
                         <td>email</td>
-                        <td><%= clients.email %> personne(s)</td>
+                        <td><%= clients.email %> </td>
                     </tr>
                     <% if (clients.telephone) { %>
                     <tr>
-                        <td>Type</td>
+                        <td>telephone</td>
                         <td><%= clients.telephone %></td>
                     </tr>
                     <% } %>
                     <% if (clients.nombre_personnes) { %>
                     <tr>
                         <td>Nombre de résidents</td>
-                        <td><%= clients.nombre_personnes %> €</td>
+                        <td><%= clients.nombre_personnes %> </td>
                     </tr>
                     <% } %>
                 </tbody>

@@ -14,13 +14,33 @@ const clientController = {
 
   // Formulaire de création
   createForm(req, res) {
-    res.render('client/create');
+    res.render('client/create', { 
+      title: 'Créer un client',
+      errors: [] 
+    });
   },
 
   // Création
   async create(req, res, next) {
     try {
       const { nom, email, telephone, nombre_personnes } = req.body;
+      
+      // Validation basique
+      const errors = [];
+      if (!nom || nom.trim() === '') {
+        errors.push({ msg: 'Le nom est requis' });
+      }
+      if (!email || email.trim() === '') {
+        errors.push({ msg: 'L\'email est requis' });
+      }
+      
+      if (errors.length > 0) {
+        return res.render('client/create', { 
+          title: 'Créer un client',
+          errors 
+        });
+      }
+      
       await Client.create({ nom, email, telephone, nombre_personnes });
       res.redirect('/client');
     } catch (err) {
@@ -46,8 +66,6 @@ const clientController = {
       const client = await Client.findById(req.params.id);
       if (!client) return res.status(404).render('errors/404');
       await client.update({ nom, email, telephone, nombre_personnes });
-      
-      if (!count) return res.status(404).render('errors/404');
       res.redirect('/client');
     } catch (err) {
       next(err);
@@ -57,7 +75,7 @@ const clientController = {
   // Suppression
   async remove(req, res, next) {
     try {
-      await Client.delete(req.params.id);
+      const count = await Client.delete(req.params.id);  // ✅ Récupérer le count
       if (!count) return res.status(404).render('errors/404');
       res.redirect('/client');
     } catch (err) {
