@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 
 // Mount routes BEFORE 404 handler
 app.use('/chambres', chambreRoutes);
-app.use('/clients', clientRoutes);
+app.use('/client', clientRoutes);
 
 // 404 handler LAST
 app.use((req, res) => {
