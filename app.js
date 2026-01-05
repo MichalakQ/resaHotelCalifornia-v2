@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import methodOverride from 'method-override';
 
-// ✅ CORRECTION #1 : Créer app AVANT de l'utiliser
+//  CORRECTION #1 : Créer app AVANT de l'utiliser
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(methodOverride('_method'));  // ✅ Maintenant app existe
+app.use(methodOverride('_method'));  //  Maintenant app existe
 
 // Home
 app.get('/', (req, res) => {
