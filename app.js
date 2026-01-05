@@ -13,16 +13,34 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//semantic
+app.use('/semantic-ui', express.static(
+  path.join(__dirname, 'node_modules/semantic-ui-css')
+));
 // Helmet - Sécurité
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        scriptSrc: ["'self'"],
+        styleSrc: [
+          "'self'", 
+          "'unsafe-inline'",
+          "https://cdn.jsdelivr.net",      //  CDN Semantic UI
+          "https://fonts.googleapis.com"   // Google Fonts
+        ],
+        scriptSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net"       //  Scripts du CDN
+        ],
+        fontSrc: [
+          "'self'",
+          "https://cdn.jsdelivr.net",      //  Fonts du CDN
+          "https://fonts.gstatic.com", 
+          "data:"                           //  Fonts encodées en base64
+        ],
         imgSrc: ["'self'", "data:"],
-        fontSrc: ["'self'"],
+        connectSrc: ["'self'"],
       },
     },
   })
