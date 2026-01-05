@@ -53,7 +53,7 @@ class Chambre {
             }
 
             if (chambreData.prix !== undefined && chambreData.prix !== null) {
-                console.log('➕ Ajout du champ prix:', chambreData.prix);
+                console.log('Ajout du champ prix:', chambreData.prix);
                 columns.push('prix');
                 values.push(chambreData.prix);
                 placeholders.push('?');
@@ -124,7 +124,7 @@ class Chambre {
 
             // Vérifier qu'il y a au moins un champ à mettre à jour
             if (updates.length === 0) {
-                console.warn('⚠️ Aucune donnée à mettre à jour');
+                console.warn('Aucune donnée à mettre à jour');
                 throw new Error('Aucune donnée à mettre à jour');
             }
 
