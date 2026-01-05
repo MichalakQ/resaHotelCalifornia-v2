@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
+    <link rel="icon" href="data:,">
+    <title>
+        Création de réservation
+    </title>
+</head>
+
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <h1>Création de réservation</h1>
+
+        <!-- Formulaire -->
+        <form class="ui form" method="POST" action="/reservations/">
+
+            <div class="field">
+                <label>ID du client</label>
+                <input type="number" name="client_id" placeholder="1" min="1" required>
+            </div>
+
+            <div class="field">
+                <label>ID de la chambre</label>
+                <input type="number" name="chambre_id" placeholder="1" min="1" required>
+            </div>
+
+            <div class="field">
+                <label>Date d'arrivée du client</label>
+                <input type="date" name="date_arrivee" placeholder="12/12/12" required>
+            </div>
+
+            <div class="field">
+                <label>Date de départ du client</label>
+                <input type="date" name="date_depart" placeholder="12/12/12" required>
+            </div>
+
+            <button type="submit" class="ui positive button">Créer</button>
+
+            <a href="/" class="ui button">Annuler</a>
+        </form>
+    </div>
+</body>
+
+</html>
