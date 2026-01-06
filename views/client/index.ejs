@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
     <link rel="icon" href="data:,">
-    <title>Liste des chambres</title>
+    <title>Liste des clients</title>
 </head>
 <body>
     <div class="ui container" style="margin-top: 2rem;">
@@ -15,15 +15,15 @@
                 <h1 class="ui header">
                     <i class="bed icon"></i>
                     <div class="content">
-                        Gestion des Chambres
-                        <div class="sub header">Liste de toutes les chambres de l'hôtel</div>
+                        Gestion des clients
+                        <div class="sub header">Liste de tous les clients de l'hôtel</div>
                     </div>
                 </h1>
             </div>
             <div class="six wide column" style="text-align: right;">
-                <a href="/chambres/create" class="ui primary button">
+                <a href="/client/create" class="ui primary button">
                     <i class="plus icon"></i>
-                    Nouvelle chambre
+                    Nouveau client
                 </a>
                 <a href="/" class="ui button">
                     <i class="home icon"></i>
@@ -35,69 +35,58 @@
         <div class="ui divider"></div>
 
         <!-- Message si aucune chambre -->
-        <% if (chambres.length === 0) { %>
+        <% if (clients.length === 0) { %>
             <div class="ui info message">
-                <div class="header">Aucune chambre enregistrée</div>
-                <p>Commencez par créer votre première chambre.</p>
+                <div class="header">Aucun client enregistré</div>
+                <p>Commencez par créer votre premier client.</p>
             </div>
         <% } else { %>
             <!-- Statistiques -->
             <div class="ui three statistics">
                 <div class="statistic">
                     <div class="value">
-                        <%= chambres.length %>
+                        <%= clients.length %>
                     </div>
-                    <div class="label">Chambres</div>
+                    <div class="label">Clients</div>
                 </div>
-                <div class="statistic">
-                    <div class="value">
-                        <%= chambres.reduce((sum, c) => sum + c.capacite, 0) %>
-                    </div>
-                    <div class="label">Capacité totale</div>
-                </div>
-                <div class="statistic">
-                    <div class="value">
-                        <%= Math.round(chambres.reduce((sum, c) => sum + c.capacite, 0) / chambres.length) %>
-                    </div>
-                    <div class="label">Capacité moyenne</div>
-                </div>
+
             </div>
 
             <div class="ui divider"></div>
 
-            <!-- Tableau des chambres -->
+            <!-- Tableau des clients -->
             <table class="ui celled striped table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Numéro</th>
-                        <th>Capacité</th>
+                        <th>Id</th>
+                        <th>Nom</th>
+                        <th>email</th>
+                        <th>Telephone</th>
                         <th class="center aligned">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% chambres.forEach(function(ch) { %>
+                    <% clients.forEach(function(cl) { %>
                         <tr>
                             <td><%= ch.id %></td>
                             <td>
                                 <h4 class="ui header">
-                                    <i class="door open icon"></i>
                                     <div class="content">
-                                        Chambre <%= ch.numero %>
+                                        Client <%= cl.nom %>
                                     </div>
                                 </h4>
                             </td>
                             <td>
                                 <i class="user icon"></i>
-                                <%= ch.capacite %> personne(s)
+                                <%= cl.email %>
                             </td>
                             <td class="center aligned">
                                 <div class="ui small buttons">
-                                    <a href="/chambres/<%= ch.id %>/edit" class="ui primary button">
+                                    <a href="/client/<%= cl.id %>/edit" class="ui primary button">
                                         <i class="edit icon"></i>
                                         Modifier
                                     </a>
-                                    <a href="/chambres/<%= ch.id %>/delete" class="ui red button">
+                                    <a href="/client/<%= cl.id %>/delete" class="ui red button">
                                         <i class="trash icon"></i>
                                         Supprimer
                                     </a>

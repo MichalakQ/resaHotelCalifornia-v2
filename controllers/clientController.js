@@ -1,5 +1,4 @@
-// controllers/clientController.js (ESM)
-import Client from '../models/Client.js'; // ensure exact case + .js
+import Client from '../models/Client.js';
 
 const clientController = {
   // Liste
@@ -48,12 +47,15 @@ const clientController = {
     }
   },
 
-  // Formulaire d’édition
+  // Formulaire d'édition
   async editForm(req, res, next) {
     try {
       const client = await Client.findById(req.params.id);
       if (!client) return res.status(404).render('errors/404');
-      res.render('client/edit', { client });
+      res.render('client/edit', { 
+        client,
+        errors: []  // Ajouter errors
+      });
     } catch (err) {
       next(err);
     }
@@ -65,6 +67,7 @@ const clientController = {
       const { nom, email, telephone, nombre_personnes } = req.body;
       const client = await Client.findById(req.params.id);
       if (!client) return res.status(404).render('errors/404');
+      
       await client.update({ nom, email, telephone, nombre_personnes });
       res.redirect('/client');
     } catch (err) {
@@ -72,11 +75,11 @@ const clientController = {
     }
   },
 
+
   // Suppression
   async remove(req, res, next) {
     try {
-      const count = await Client.delete(req.params.id);  // ✅ Récupérer le count
-      if (!count) return res.status(404).render('errors/404');
+      await Client.delete(req.params.id);
       res.redirect('/client');
     } catch (err) {
       next(err);
