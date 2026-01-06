@@ -57,8 +57,8 @@
             <table class="ui celled striped table">
                 <thead>
                     <tr>
-                        <th>ID du client</th>
-                        <th>ID de la chambre</th>
+                        <th>Nom du client</th>
+                        <th>Numero de la chambre</th>
                         <th>Date d'arrivée</th>
                         <th>Date de départ</th>
                         <th class="center aligned">Actions</th>
@@ -68,10 +68,10 @@
                     <% reservations.forEach(function(reservation) { %>
                         <tr>
                             <td>
-                                <%= reservation.id_client %> 
+                                <%= reservation.nom %> 
                             </td>
                             <td>
-                                <%= reservation.id_chambre %>
+                                <%= reservation.numero %>
                             </td>
                             <td>
                                 <%= reservation.date_arrivee %>
