@@ -1,23 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <link rel="icon" href="data:,"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <link rel="icon" href="data:,">
+    <title>Liste des chambres</title>
 </head>
-<h1>Liste des chambres</h1>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <!-- En-tête -->
+        <div class="ui stackable grid">
+            <div class="ten wide column">
+                <h1 class="ui header">
+                    <i class="bed icon"></i>
+                    <div class="content">
+                        Gestion des Chambres
+                        <div class="sub header">Liste de toutes les chambres de l'hôtel</div>
+                    </div>
+                </h1>
+            </div>
+            <div class="six wide column" style="text-align: right;">
+                <a href="/chambres/create" class="ui primary button">
+                    <i class="plus icon"></i>
+                    Nouvelle chambre
+                </a>
+                <a href="/" class="ui button">
+                    <i class="home icon"></i>
+                    Accueil
+                </a>
+            </div>
+        </div>
 
-<a href="/chambres/create">➕ Ajouter une chambre</a>
+        <div class="ui divider"></div>
 
-<table border="1" cellpadding="5">
-  <tr><th>ID</th><th>Numéro</th><th>Capacité</th><th>Actions</th></tr>
-  <% chambres.forEach(ch => { %>
-    <tr>
-      <td><%= ch.id %></td>
-      <td><%= ch.numero %></td>
-      <td><%= ch.capacite %></td>
-      <td>
-        <a href="/chambres/<%= ch.id %>/edit">✏️ Modifier</a>
-        <form method="post" action="/chambres/<%= ch.id %>/delete" style="display:inline;">
-          <button type="submit">🗑 Supprimer</button>
-        </form>
-      </td>
-    </tr>
-  <% }) %>
-</table>
+        <!-- Message si aucune chambre -->
+        <% if (chambres.length === 0) { %>
+            <div class="ui info message">
+                <div class="header">Aucune chambre enregistrée</div>
+                <p>Commencez par créer votre première chambre.</p>
+            </div>
+        <% } else { %>
+            <!-- Statistiques -->
+            <div class="ui three statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <%= chambres.length %>
+                    </div>
+                    <div class="label">Chambres</div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <%= chambres.reduce((sum, c) => sum + c.capacite, 0) %>
+                    </div>
+                    <div class="label">Capacité totale</div>
+                </div>
+                <div class="statistic">
+                    <div class="value">
+                        <%= Math.round(chambres.reduce((sum, c) => sum + c.capacite, 0) / chambres.length) %>
+                    </div>
+                    <div class="label">Capacité moyenne</div>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <!-- Tableau des chambres -->
+            <table class="ui celled striped table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Numéro</th>
+                        <th>Capacité</th>
+                        <th class="center aligned">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% chambres.forEach(function(ch) { %>
+                        <tr>
+                            <td><%= ch.id %></td>
+                            <td>
+                                <h4 class="ui header">
+                                    <i class="door open icon"></i>
+                                    <div class="content">
+                                        Chambre <%= ch.numero %>
+                                    </div>
+                                </h4>
+                            </td>
+                            <td>
+                                <i class="user icon"></i>
+                                <%= ch.capacite %> personne(s)
+                            </td>
+                            <td class="center aligned">
+                                <div class="ui small buttons">
+                                    <a href="/chambres/<%= ch.id %>/edit" class="ui primary button">
+                                        <i class="edit icon"></i>
+                                        Modifier
+                                    </a>
+                                    <a href="/chambres/<%= ch.id %>/delete" class="ui red button">
+                                        <i class="trash icon"></i>
+                                        Supprimer
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+</body>
+</html>

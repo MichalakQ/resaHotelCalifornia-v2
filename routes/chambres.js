@@ -16,12 +16,12 @@ router.post('/', ChambreController.store);
 router.get('/:id/edit', ChambreController.edit);
 
 // Éditer - traitement
-router.post('/:id/edit', ChambreController.update);  // ✅ POST /:id/edit
+router.post('/:id/edit', ChambreController.update);  // POST /:id/edit
 
 // Supprimer - confirmation
 router.get('/:id/delete', ChambreController.delete);
 
 // Supprimer - traitement
-router.post('/:id/delete', ChambreController.destroy);  // ✅ POST /:id/delete
+router.post('/:id/delete', ChambreController.destroy);  //  POST /:id/delete
 
 export default router;
