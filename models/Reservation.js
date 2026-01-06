@@ -12,7 +12,7 @@ class Reservation {
     // Récupérer toutes les réservations
     static async findAll() {
         try {
-            const [rows] = await db.execute('SELECT * FROM reservation ORDER BY chambre_id, client_id');
+            const [rows] = await db.execute('SELECT * FROM reservations ORDER BY chambre_id, client_id');
             return rows.map(row => new Reservation(row));
         } catch (error) {
             throw new Error('Erreur lors de la récupération des réservations: ' + error.message);
@@ -22,7 +22,7 @@ class Reservation {
     // Récupérer une réservation par ID
     static async findById(id) {
         try {
-            const [rows] = await db.execute('SELECT * FROM reservation WHERE id = ?', [id]);
+            const [rows] = await db.execute('SELECT * FROM reservations WHERE id = ?', [id]);
             return rows.length > 0 ? new Reservation(rows[0]) : null;
         } catch (error) {
             throw new Error('Erreur lors de la récupération de la réservation: ' + error.message);
@@ -33,7 +33,7 @@ class Reservation {
     static async create(reservationData) {
         try {
             const [result] = await db.execute(
-                'INSERT INTO reservation (client_id, chambre_id, date_arrivee, date_depart) VALUES (?, ?, ?, ?)',
+                'INSERT INTO reservations (client_id, chambre_id, date_arrivee, date_depart) VALUES (?, ?, ?, ?)',
                 [reservationData.client_id, reservationData.chambre_id, reservationData.date_arrivee, reservationData.date_depart]
             );
             return result.insertId;
@@ -49,7 +49,7 @@ class Reservation {
     async update(reservationData) {
         try {
             await db.execute(
-                'UPDATE reservation SET client_id = ?, chambre_id = ?, date_arrivee = ?, date_depart = ? WHERE id = ?',
+                'UPDATE reservations SET client_id = ?, chambre_id = ?, date_arrivee = ?, date_depart = ? WHERE id = ?',
                 [reservationData.client_id, reservationData.chambre_id, reservationData.date_arrivee, reservationData.date_depart, this.id]
             );
             
@@ -69,7 +69,7 @@ class Reservation {
     // Supprimer une réservation
     static async delete(id) {
         try {
-            await db.execute('DELETE FROM reservation WHERE id = ?', [id]);
+            await db.execute('DELETE FROM reservations WHERE id = ?', [id]);
             return true;
         } catch (error) {
             throw new Error('Erreur lors de la suppression de la réservation: ' + error.message);
@@ -108,7 +108,7 @@ class Reservation {
     static async findByClientId(clientId) {
         try {
             const [rows] = await db.execute(
-                'SELECT * FROM reservation WHERE client_id = ? ORDER BY date_arrivee DESC',
+                'SELECT * FROM reservations WHERE client_id = ? ORDER BY date_arrivee DESC',
                 [clientId]
             );
             return rows.map(row => new Reservation(row));
@@ -121,7 +121,7 @@ class Reservation {
     static async findByChambreId(chambreId) {
         try {
             const [rows] = await db.execute(
-                'SELECT * FROM reservation WHERE chambre_id = ? ORDER BY date_arrivee DESC',
+                'SELECT * FROM reservations WHERE chambre_id = ? ORDER BY date_arrivee DESC',
                 [chambreId]
             );
             return rows.map(row => new Reservation(row));

@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet'; 
 import chambreRoutes from './routes/chambres.js';
 import clientRoutes from './routes/clients.js';
+import reservationsRoutes from './routes/reservations.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import methodOverride from 'method-override';
@@ -63,6 +64,7 @@ app.get('/', (req, res) => {
 // Mount routes BEFORE 404 handler
 app.use('/chambres', chambreRoutes);
 app.use('/client', clientRoutes);
+app.use('/reservations' , reservationsRoutes);
 
 // 404 handler LAST
 app.use((req, res) => {
