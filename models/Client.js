@@ -11,7 +11,7 @@ class Client {
     // Récupérer tous les clients
     static async findAll() {
         try {
-            const [rows] = await db.execute('SELECT * FROM client ORDER BY nom');
+            const [rows] = await db.execute('SELECT * FROM clients ORDER BY nom');
             return rows.map(row => new Client(row));
         } catch (error) {
             throw new Error('Erreur lors de la récupération des clients: ' + error.message);
@@ -32,7 +32,7 @@ class Client {
     static async create(clientData) {
         try {
             const [result] = await db.execute(
-                'INSERT INTO client (nom, email, telephone, nombre_personnes) VALUES (?, ?, ?, ?)',
+                'INSERT INTO clients (nom, email, telephone, nombre_personnes) VALUES (?, ?, ?, ?)',
                 [clientData.nom, clientData.email, clientData.telephone, clientData.nombre_personnes]
             );
             return result.insertId;

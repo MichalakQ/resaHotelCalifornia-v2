@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
+    <link rel="icon" href="data:,">
+    <title><%= title %></title>
+</head>
+
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <h1 class="ui red header">
+            <i class="warning sign icon"></i>
+            <div class="content">
+                Supprimer la Réservation
+            </div>
+        </h1>
+
+        <!-- Message d'avertissement -->
+        <div class="ui warning message">
+            <div class="header">
+                Attention !
+            </div>
+            <p>Vous êtes sur le point de supprimer définitivement cette réservation. Cette action est irréversible.</p>
+        </div>
+
+        <!-- Informations de la chambre à supprimer -->
+        <div class="ui segment">
+            <h3 class="ui header">Détails de la réservation</h3>
+            <table class="ui definition table">
+                <tbody>
+                    <tr>
+                        <td class="collapsing">ID du client</td>
+                        <td><strong><%= reservation.id_client %></strong></td>
+                    </tr>
+                    <tr>
+                        <td>ID de la chambre</td>
+                        <td><%= reservation.id_chambre %></td>
+                    </tr>
+                
+                    <tr>
+                        <td>Date d'arrivée</td>
+                        <td><%= reservation.date_arrivee %></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Date de départ</td>
+                        <td><%= reservation.date_depart %> €</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Formulaire de confirmation -->
+        <form class="ui form" method="POST" action="/reservations/<%= reservation.id %>?_method=DELETE">
+            <div class="ui buttons">
+                <a href="/reservations" class="ui button">
+                    <i class="cancel icon"></i>
+                    Annuler
+                </a>
+                <div class="or" data-text="ou"></div>
+                <button type="submit" class="ui negative button">
+                    <i class="trash icon"></i>
+                    Confirmer la suppression
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/semantic-ui/semantic.min.js"></script>
+</body>
+
+</html>
