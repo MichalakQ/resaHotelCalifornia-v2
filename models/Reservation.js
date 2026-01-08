@@ -12,7 +12,7 @@ class Reservation {
     // Récupérer toutes les réservations
     static async findAll() {
         try {
-            const [rows] = await db.execute('SELECT nom , numero , client_id , chambre_id , date_arrivee , date_depart FROM reservations r , chambres c , clients s WHERE r.client_id = s.id AND r.chambre_id = c.id ORDER BY chambre_id, client_id');
+            const [rows] = await db.execute('SELECT r.id , nom , numero , client_id , chambre_id , date_arrivee , date_depart FROM reservations r , chambres c , clients s WHERE r.client_id = s.id AND r.chambre_id = c.id ORDER BY chambre_id, client_id');
             return rows.map(row => new Reservation(row));
         } catch (error) {
             throw new Error('Erreur lors de la récupération des réservations: ' + error.message);
@@ -22,7 +22,7 @@ class Reservation {
     // Récupérer une réservation par ID
     static async findById(id) {
         try {
-            const [rows] = await db.execute('SELECT nom , numero , client_id , chambre_id , date_arrivee , date_depart FROM reservations r , chambres c , clients s WHERE r.client_id = s.id AND r.chambre_id = c.id AND r.id = ?', [id]);
+            const [rows] = await db.execute('SELECT r.id , nom , numero , client_id , chambre_id , date_arrivee , date_depart FROM reservations r , chambres c , clients s WHERE r.client_id = s.id AND r.chambre_id = c.id AND r.id = ?', [id]);
             return rows.length > 0 ? new Reservation(rows[0]) : null;
         } catch (error) {
             throw new Error('Erreur lors de la récupération de la réservation: ' + error.message);
