@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <title>Modifier le client</title>
+</head>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <h1 class="ui header">
+            <i class="edit icon"></i>
+            <div class="content">
+                Modifier le client <%= client.nom %>
+                <div class="sub header">Mettez à jour les informations du client</div>
+            </div>
+        </h1>
+
+        <div class="ui divider"></div>
+        
+        <!-- Affichage des erreurs -->
+        <% if (locals.errors && errors.length > 0) { %>
+            <div class="ui error message">
+                <div class="header">Erreurs de validation :</div>
+                <ul class="list">
+                    <% errors.forEach(function(error) { %>
+                        <li><%= error.msg %></li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
+        
+        <!-- Formulaire -->
+        <form class="ui form" method="POST" action="/client/<%= client.id %>?_method=PUT">
+            <div class="ui segment">
+                <h3 class="ui header">Informations du client</h3>
+                
+                <div class="required field">
+                    <label>
+                        <i class="user icon"></i>
+                        Nom complet
+                    </label>
+                    <input type="text" name="nom" placeholder="Nom et prénom du client" value="<%= client.nom %>" required>
+                </div>
+
+                <div class="two fields">
+                    <div class="required field">
+                        <label>
+                            <i class="envelope icon"></i>
+                            Email
+                        </label>
+                        <input type="email" name="email" placeholder="email@example.com" value="<%= client.email %>" required>
+                    </div>
+                    <div class="field">
+                        <label>
+                            <i class="phone icon"></i>
+                            Téléphone
+                        </label>
+                        <input type="tel" name="telephone" placeholder="entrez un numéro" value="<%= client.telephone || '' %>">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>
+                        <i class="users icon"></i>
+                        Nombre de personnes
+                    </label>
+                    <input 
+                        type="number" 
+                        name="nombre_personnes" 
+                        placeholder="Nombre de personnes" 
+                        min="1" 
+                        max="10"
+                        value="<%= client.nombre_personnes || 1 %>"
+                    >
+                    <small class="ui text grey">Nombre de personnes accompagnant ce client</small>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="ui buttons">
+                <a href="/client" class="ui button">
+                    <i class="cancel icon"></i>
+                    Annuler
+                </a>
+                <div class="or" data-text="ou"></div>
+                <button type="submit" class="ui primary button">
+                    <i class="save icon"></i>
+                    Mettre à jour
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <link rel="icon" href="data:,">
+    <title>Liste des réservations</title>
+</head>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <!-- En-tête -->
+        <div class="ui stackable grid">
+            <div class="ten wide column">
+                <h1 class="ui header">
+                    <!-- <i class="bed icon"></i> -->
+                    <div class="content">
+                        Gestion des réservations
+                        <div class="sub header">Liste de toutes les réservations de l'hôtel</div>
+                    </div>
+                </h1>
+            </div>
+            <div class="six wide column" style="text-align: right;">
+                <a href="/reservations/create" class="ui primary button">
+                    <i class="plus icon"></i>
+                    Nouvelle réservation
+                </a>
+                <a href="/" class="ui button">
+                    <i class="home icon"></i>
+                    Accueil
+                </a>
+            </div>
+        </div>
+
+        <div class="ui divider"></div>
+
+        <!-- Message si aucune réservation -->
+        <% if (reservations.length === 0) { %>
+            <div class="ui info message">
+                <div class="header">Aucune réservation enregistrée</div>
+                <p>Commencez par créer votre première réservation.</p>
+            </div>
+        <% } else { %>
+            <!-- Statistiques -->
+            <div class="ui three statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <%= reservations.length %>
+                    </div>
+                    <div class="label">Réservations</div>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <!-- Tableau des réservations -->
+            <table class="ui celled striped table">
+                <thead>
+                    <tr>
+                        <th>Nom du client</th>
+                        <th>Numero de la chambre</th>
+                        <th>Date d'arrivée</th>
+                        <th>Date de départ</th>
+                        <th class="center aligned">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% reservations.forEach(function(reservation) { %>
+                        <tr>
+                            <td>
+                                <%= reservation.nom %>
+                            </td>
+                            <td>
+                                <%= reservation.numero %>
+                            </td>
+                            <td>
+                                <%= reservation.date_arrivee %>
+                            </td>
+                            <td>
+                                <%= reservation.date_depart %>
+                            </td>
+                            <td class="center aligned">
+                                <div class="ui small buttons">
+                                    <a href="/reservations/<%= reservation.id %>/edit" class="ui primary button">
+                                        <i class="edit icon"></i>
+                                        Modifier
+                                    </a>
+                                    <a href="/reservations/<%= reservation.id %>/delete" class="ui red button">
+                                        <i class="trash icon"></i>
+                                        Supprimer
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+</body>
+</html>

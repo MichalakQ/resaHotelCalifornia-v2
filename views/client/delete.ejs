@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
+    <link rel="icon" href="data:,">
+    <title><%= title %></title>
+</head>
+
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <h1 class="ui red header">
+            <i class="warning sign icon"></i>
+            <div class="content">
+                Supprimer le client
+            </div>
+        </h1>
+
+        <!-- Message d'avertissement -->
+        <div class="ui warning message">
+            <div class="header">
+                Attention !
+            </div>
+            <p>Vous êtes sur le point de supprimer définitivement ce client. Cette action est irréversible.</p>
+        </div>
+
+        <!-- Informations du client à supprimer -->
+        <div class="ui segment">
+            <h3 class="ui header">Détails de la chambre</h3>
+            <table class="ui definition table">
+                <tbody>
+                    <tr>
+                        <td class="collapsing">Nom</td>
+                        <td><strong><%= clients.nom %></strong></td>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td><%= clients.email %> </td>
+                    </tr>
+                    <% if (clients.telephone) { %>
+                    <tr>
+                        <td>telephone</td>
+                        <td><%= clients.telephone %></td>
+                    </tr>
+                    <% } %>
+                    <% if (clients.nombre_personnes) { %>
+                    <tr>
+                        <td>Nombre de résidents</td>
+                        <td><%= clients.nombre_personnes %> </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Formulaire de confirmation -->
+        <form class="ui form" method="POST" action="/clients/<%= clients.id %>?_method=DELETE">
+            <div class="ui buttons">
+                <a href="/clients" class="ui button">
+                    <i class="cancel icon"></i>
+                    Annuler
+                </a>
+                <div class="or" data-text="ou"></div>
+                <button type="submit" class="ui negative button">
+                    <i class="trash icon"></i>
+                    Confirmer la suppression
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/semantic-ui/semantic.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <link rel="icon" href="data:,">
+    <title>Liste des clients</title>
+</head>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <!-- En-tête -->
+        <div class="ui stackable grid">
+            <div class="ten wide column">
+                <h1 class="ui header">
+                    <i class="bed icon"></i>
+                    <div class="content">
+                        Gestion des clients
+                        <div class="sub header">Liste de tous les clients de l'hôtel</div>
+                    </div>
+                </h1>
+            </div>
+            <div class="six wide column" style="text-align: right;">
+                <a href="/client/create" class="ui primary button">
+                    <i class="plus icon"></i>
+                    Nouveau client
+                </a>
+                <a href="/" class="ui button">
+                    <i class="home icon"></i>
+                    Accueil
+                </a>
+            </div>
+        </div>
+
+        <div class="ui divider"></div>
+
+        <!-- Message si aucun client -->
+        <% if (clients.length === 0) { %>
+            <div class="ui info message">
+                <div class="header">Aucun client enregistré</div>
+                <p>Commencez par créer votre premier client.</p>
+            </div>
+        <% } else { %>
+            <!-- Statistiques -->
+            <div class="ui three statistics">
+                <div class="statistic">
+                    <div class="value">
+                        <%= clients.length %>
+                    </div>
+                    <div class="label">Clients</div>
+                </div>
+
+            </div>
+
+            <div class="ui divider"></div>
+
+            <!-- Tableau des clients -->
+            <table class="ui celled striped table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nom</th>
+                        <th>email</th>
+                        <th>Telephone</th>
+                        <th class="center aligned">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% clients.forEach(function(cl) { %>
+                        <tr>
+                            <td><%= cl.id %></td>
+                            <td>
+                                <h4 class="ui header">
+                                    <div class="content">
+                                        Client <%= cl.nom %>
+                                    </div>
+                                </h4>
+                            </td>
+                            <td>
+                                <i class="user icon"></i>
+                                <%= cl.email %>
+                            </td>
+                            <td class="center aligned">
+                                <div class="ui small buttons">
+                                    <a href="/client/<%= cl.id %>/edit" class="ui primary button">
+                                        <i class="edit icon"></i>
+                                        Modifier
+                                    </a>
+                                    <a href="/client/<%= cl.id %>/delete" class="ui red button">
+                                        <i class="trash icon"></i>
+                                        Supprimer
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+</body>
+</html>

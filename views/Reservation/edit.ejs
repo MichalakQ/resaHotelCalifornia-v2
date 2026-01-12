@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
+    <title>Modifier la réservation</title>
+</head>
+<body>
+    <div class="ui container" style="margin-top: 2rem;">
+        <h1>Modifier la réservation </h1>
+        
+        <!-- Affichage des erreurs -->
+        <% if (locals.errors && errors.length > 0) { %>
+            <div class="ui error message">
+                <div class="header">Erreurs :</div>
+                <ul class="list">
+                    <% errors.forEach(function(error) { %>
+                        <li><%= error.msg %></li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
+        
+        <!-- Formulaire -->
+        <form class="ui form" method="POST" action="/reservations/<%= reservation.id %>?_method=PUT">
+            <div class="field">
+                <label>Nom du client</label>
+                <input type="text" name="nom" placeholder="Pierre Duroc" required>
+            </div>
+
+            <div class="field">
+                <label>ID de la chambre</label>
+                <input type="number" name="numero" placeholder="101" min="1" required>
+            </div>
+
+            <div class="field">
+                <label>Date d'arrivée du client</label>
+                <input type="date" name="date_arrivee" placeholder="12/12/12" required>
+            </div>
+
+            <div class="field">
+                <label>Date de départ du client</label>
+                <input type="date" name="date_depart" placeholder="12/12/12" required>
+            </div>
+            <button type="submit" class="ui primary button">
+                <i class="save icon"></i>
+                Mettre à jour
+            </button>
+            <a href="/reservations" class="ui button">
+                <i class="cancel icon"></i>
+                Annuler
+            </a>
+        </form>
+    </div>
+</body>
+</html>
