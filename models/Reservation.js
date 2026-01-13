@@ -4,18 +4,36 @@ class Reservation {
     constructor(data) {
         this.id = data.id;
         this.client_id = data.client_id;
+        this.nom = data.nom;
         this.chambre_id = data.chambre_id;
-        this.date_arrivee = data.date_arrivee;
-        this.date_depart = data.date_depart;
+        this.numero = data.numero;
+        this.date_arrivee = new Date(data.date_arrivee);
+        this.date_depart = new Date(data.date_depart);
     }
 
     // Récupérer toutes les réservations
     static async findAll() {
         try {
-            const [rows] = await db.execute('SELECT r.id , nom , numero , client_id , chambre_id , date_arrivee , date_depart FROM reservations r , chambres c , clients s WHERE r.client_id = s.id AND r.chambre_id = c.id ORDER BY chambre_id, client_id');
+            const [rows] = await db.execute(`
+                SELECT 
+                    r.id,
+                    r.client_id,
+                    r.chambre_id,
+                    r.date_arrivee,
+                    r.date_depart,
+                    s.nom,
+                    c.numero
+                FROM reservations r
+                JOIN clients s ON r.client_id = s.id
+                JOIN chambres c ON r.chambre_id = c.id
+                ORDER BY c.numero, s.nom
+            `);
+    
             return rows.map(row => new Reservation(row));
         } catch (error) {
-            throw new Error('Erreur lors de la récupération des réservations: ' + error.message);
+            throw new Error(
+                'Erreur lors de la récupération des réservations: ' + error.message
+            );
         }
     }
 
