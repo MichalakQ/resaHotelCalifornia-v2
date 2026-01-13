@@ -13,7 +13,7 @@
         <div class="ui stackable grid">
             <div class="ten wide column">
                 <h1 class="ui header">
-                    <i class="bed icon"></i>
+                    <i class="users icon"></i>
                     <div class="content">
                         Gestion des clients
                         <div class="sub header">Liste de tous les clients de l'hôtel</div>
@@ -42,14 +42,13 @@
             </div>
         <% } else { %>
             <!-- Statistiques -->
-            <div class="ui three statistics">
+            <div class="ui one statistics">
                 <div class="statistic">
                     <div class="value">
                         <%= clients.length %>
                     </div>
                     <div class="label">Clients</div>
                 </div>
-
             </div>
 
             <div class="ui divider"></div>
@@ -60,8 +59,8 @@
                     <tr>
                         <th>Id</th>
                         <th>Nom</th>
-                        <th>email</th>
-                        <th>Telephone</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
                         <th class="center aligned">Actions</th>
                     </tr>
                 </thead>
@@ -72,13 +71,17 @@
                             <td>
                                 <h4 class="ui header">
                                     <div class="content">
-                                        Client <%= cl.nom %>
+                                        <%= cl.nom %>
                                     </div>
                                 </h4>
                             </td>
                             <td>
-                                <i class="user icon"></i>
+                                <i class="mail icon"></i>
                                 <%= cl.email %>
+                            </td>
+                            <td>
+                                <i class="phone icon"></i>
+                                <%= cl.telephone %>
                             </td>
                             <td class="center aligned">
                                 <div class="ui small buttons">
