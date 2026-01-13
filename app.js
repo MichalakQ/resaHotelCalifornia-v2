@@ -1,4 +1,6 @@
 import express from 'express';
+import https from 'https';           
+import fs from 'fs';                 
 import helmet from 'helmet'; 
 import chambreRoutes from './routes/chambres.js';
 import clientRoutes from './routes/clients.js';
@@ -10,10 +12,15 @@ import methodOverride from 'method-override';
 //  CORRECTION #1 : Créer app AVANT de l'utiliser
 const app = express();
 const PORT = process.env.PORT || 3000;
+const PORT_HTTPS = 3001;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const sslOptions = {
+    key: fs.readFileSync(path.join(__dirname, 'ssl', 'private.key')),
+    cert: fs.readFileSync(path.join(__dirname, 'ssl', 'certificate.crt'))
+};
 //semantic
 app.use('/semantic-ui', express.static(
   path.join(__dirname, 'node_modules/semantic-ui-css')
@@ -72,6 +79,13 @@ app.use((req, res) => {
     title: 'Page non trouvée',
     error: "La page demandée n'existe pas."
   });
+});
+app.listen(PORT, () => {
+    console.log(`🌐 Serveur HTTP démarré sur http://localhost:${PORT}`);
+});
+
+https.createServer(sslOptions, app).listen(PORT_HTTPS, () => {
+    console.log(`🔒 Serveur HTTPS démarré sur https://localhost:${PORT_HTTPS}`);
 });
 
 app.listen(PORT, () => {
