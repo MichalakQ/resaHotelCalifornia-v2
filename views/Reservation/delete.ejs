@@ -42,12 +42,12 @@
                 
                     <tr>
                         <td>Date d'arrivée</td>
-                        <td><%= reservation.date_arrivee %></td>
+                        <td><%= reservation.date_arrivee.getDate() %>/<%= reservation.date_arrivee.getMonth() %>/<%= reservation.date_arrivee.getFullYear() %></td>
                     </tr>
                     
                     <tr>
                         <td>Date de départ</td>
-                        <td><%= reservation.date_depart %> €</td>
+                        <td><%= reservation.date_depart.getDate() %>/<%= reservation.date_depart.getMonth() %>/<%= reservation.date_depart.getFullYear() %></td>
                     </tr>
                     
                 </tbody>
