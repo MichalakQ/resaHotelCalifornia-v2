@@ -14,8 +14,14 @@
                 <i class="exclamation triangle icon"></i>
                 Une erreur est survenue
             </div>
-            <p><%= message %></p>
-            <% if (error && error.stack) { %>
+            
+            <% if (typeof message !== 'undefined' && message) { %>
+                <p><%= message %></p>
+            <% } else { %>
+                <p>Une erreur inattendue s'est produite.</p>
+            <% } %>
+            
+            <% if (typeof error !== 'undefined' && error && error.stack) { %>
                 <details>
                     <summary>Détails techniques</summary>
                     <pre><%= error.stack %></pre>

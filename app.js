@@ -77,6 +77,7 @@ app.use('/reservations' , reservationsRoutes);
 app.use((req, res) => {
   res.status(404).render('error', {
     title: 'Page non trouvée',
+    message: 'Page non trouvée.',
     error: "La page demandée n'existe pas."
   });
 });
