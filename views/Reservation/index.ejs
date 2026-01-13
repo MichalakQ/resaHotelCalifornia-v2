@@ -74,10 +74,10 @@
                                 <%= reservation.numero %>
                             </td>
                             <td>
-                                <%= reservation.date_arrivee %>
+                                <%= reservation.date_arrivee.getDate() %>/<%= reservation.date_arrivee.getMonth() %>/<%= reservation.date_arrivee.getFullYear() %>
                             </td>
                             <td>
-                                <%= reservation.date_depart %>
+                                <%= reservation.date_depart.getDate() %>/<%= reservation.date_depart.getMonth() %>/<%= reservation.date_depart.getFullYear() %>
                             </td>
                             <td class="center aligned">
                                 <div class="ui small buttons">
