@@ -15,18 +15,33 @@
     <div class="ui container" style="margin-top: 2rem;">
         <h1>Création de réservation</h1>
 
-        <!-- Formulaire -->
+        <!-- Formulaire pour sélectionner le client et la chambre -->
         <form class="ui form" method="POST" action="/reservations/">
 
             <div class="field">
-                <label>Nom du client</label>
-                <input type="text" name="nom" placeholder="Pierre Duroc" required>
+                <label>Client</label>
+                <select name="client_id" class="ui dropdown" required>
+                    <option value="">-- Sélectionner un client --</option>
+                    <% clients.forEach(client => { %>
+                        <option value="<%= client.id %>">
+                            <%= client.nom %>
+                        </option>
+                    <% }) %>
+                </select>
             </div>
-
+            
             <div class="field">
-                <label>Numéro de la chambre</label>
-                <input type="number" name="numero" placeholder="101" min="1" required>
+                <label>Chambre</label>
+                <select name="chambre_id" class="ui dropdown" required>
+                    <option value="">-- Sélectionner une chambre --</option>
+                    <% chambres.forEach(chambre => { %>
+                        <option value="<%= chambre.id %>">
+                            Chambre <%= chambre.numero %> (capacité <%= chambre.capacite %>)
+                        </option>
+                    <% }) %>
+                </select>
             </div>
+            
 
             <div class="field">
                 <label>Date d'arrivée du client</label>

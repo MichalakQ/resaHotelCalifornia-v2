@@ -1,4 +1,7 @@
 import Reservation from '../models/Reservation.js';
+import Client from '../models/Client.js';
+import Chambre from '../models/Chambre.js';
+
 
 class ReservationController {
     // Afficher la liste des réservations
@@ -18,25 +21,31 @@ class ReservationController {
     }
     
     // Afficher le formulaire de création
-    static create(req, res) {
+    static async create(req, res) {
         console.log(' ReservationController.create() appelé (GET)');
-        console.log(' Tentative de rendu: Reservation/create');
         try {
+            const clients = await Client.findAll();
+            const chambres = await Chambre.findAll();
+    
             res.render('Reservation/create', {
                 title: 'Ajouter une Réservation',
                 reservation: {},
+                clients,
+                chambres,
                 errors: []
             });
-            console.log(' Vue Reservation/create rendue avec succès');
         } catch (error) {
-            console.error(' Erreur lors de l\'affichage du formulaire:', error);
+            console.error(' Erreur lors de l\'affichage du formulaire:', error.message);
             res.render('Reservation/create', {
                 title: 'Ajouter une Réservation',
                 reservation: {},
-                errors: [{ msg: 'Erreur lors de l\'affichage du formulaire' }]
+                clients: [],
+                chambres: [],
+                errors: [{ msg: 'Erreur lors du chargement des données' }]
             });
         }
     }
+    
     
     // Traiter la création d'une réservation
     static async store(req, res) {
