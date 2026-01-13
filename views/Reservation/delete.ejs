@@ -1,76 +1,77 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer la réservation</title>
     <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
-    <link rel="icon" href="data:,">
-    <title><%= title %></title>
 </head>
 
 <body>
-    <div class="ui container" style="margin-top: 2rem;">
-        <h1 class="ui red header">
-            <i class="warning sign icon"></i>
-            <div class="content">
-                Supprimer la Réservation
-            </div>
-        </h1>
+<div class="ui container" style="margin-top:2rem;">
 
-        <!-- Message d'avertissement -->
-        <div class="ui warning message">
-            <div class="header">
-                Attention !
-            </div>
-            <p>Vous êtes sur le point de supprimer définitivement cette réservation. Cette action est irréversible.</p>
+    <h1 class="ui red header">
+        <i class="warning sign icon"></i>
+        <div class="content">
+            Supprimer la réservation
         </div>
+    </h1>
 
-        <!-- Informations de la chambre à supprimer -->
-        <div class="ui segment">
-            <h3 class="ui header">Détails de la réservation</h3>
-            <table class="ui definition table">
-                <tbody>
-                    <tr>
-                        <td class="collapsing">Nom du client</td>
-                        <td><strong><%= reservation.nom %></strong></td>
-                    </tr>
-                    <tr>
-                        <td>Numéro de la chambre</td>
-                        <td><%= reservation.numero %></td>
-                    </tr>
-                
-                    <tr>
-                        <td>Date d'arrivée</td>
-                        <td><%= reservation.date_arrivee.getDate() %>/<%= reservation.date_arrivee.getMonth() + 1 %>/<%= reservation.date_arrivee.getFullYear() %></td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Date de départ</td>
-                        <td><%= reservation.date_depart.getDate() %>/<%= reservation.date_depart.getMonth() + 1 %>/<%= reservation.date_depart.getFullYear() %></td>
-                    </tr>
-                    
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Formulaire de confirmation -->
-        <form class="ui form" method="POST" action="/reservations/<%= reservation.id %>?_method=DELETE">
-            <div class="ui buttons">
-                <a href="/reservations" class="ui button">
-                    <i class="cancel icon"></i>
-                    Annuler
-                </a>
-                <div class="or" data-text="ou"></div>
-                <button type="submit" class="ui negative button">
-                    <i class="trash icon"></i>
-                    Confirmer la suppression
-                </button>
-            </div>
-        </form>
+    <!-- Message d'avertissement -->
+    <div class="ui warning message">
+        <div class="header">Attention</div>
+        <p>
+            Vous êtes sur le point de supprimer définitivement cette réservation.
+            Cette action est <strong>irréversible</strong>.
+        </p>
     </div>
 
-    <script src="/semantic-ui/semantic.min.js"></script>
-</body>
+    <!-- Info à supprimer -->
+    <div class="ui segment">
+        <h3 class="ui header">Détails de la réservation</h3>
 
+        <table class="ui definition table">
+            <tbody>
+                <tr>
+                    <td class="collapsing">Client</td>
+                    <td><strong><%= reservation.nom %></strong></td>
+                </tr>
+
+                <tr>
+                    <td>Chambre</td>
+                    <td>Chambre <%= reservation.numero %></td>
+                </tr>
+
+                <tr>
+                    <td>Date d’arrivée</td>
+                    <td>
+                        <%= reservation.date_arrivee.toLocaleDateString('fr-FR') %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Date de départ</td>
+                    <td>
+                        <%= reservation.date_depart.toLocaleDateString('fr-FR') %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form method="POST" action="/reservations/<%= reservation.id %>/delete">
+        <div class="ui buttons">
+            <a href="/reservations" class="ui button">
+                <i class="cancel icon"></i>
+                Annuler
+            </a>
+            <div class="or" data-text="ou"></div>
+            <button type="submit" class="ui negative button">
+                <i class="trash icon"></i>
+                Confirmer la suppression
+            </button>
+        </div>
+    </form>
+
+</div>
+</body>
 </html>

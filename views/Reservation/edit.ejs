@@ -2,57 +2,79 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
     <title>Modifier la réservation</title>
+    <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
 </head>
+
 <body>
-    <div class="ui container" style="margin-top: 2rem;">
-        <h1>Modifier la réservation </h1>
+<div class="ui container" style="margin-top:2rem;">
+    <h1 class="ui header">Modifier la réservation</h1>
+
+    <% if (errors && errors.length > 0) { %>
+        <div class="ui error message">
+            <div class="header">Erreurs</div>
+            <ul class="list">
+                <% errors.forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }) %>
+            </ul>
+        </div>
+    <% } %>
+
+    <form class="ui form" method="POST" action="/reservations/<%= reservation.id %>/edit">
+
+        <!-- Client -->
+        <div class="field">
+            <label>Client</label>
+            <select name="client_id" class="ui dropdown" required>
+                <% clients.forEach(client => { %>
+                    <option value="<%= client.id %>"
+                        <%= client.id === reservation.client_id ? 'selected' : '' %>>
+                        <%= client.nom %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+
+        <!-- Chambre -->
+        <div class="field">
+            <label>Chambre</label>
+            <select name="chambre_id" class="ui dropdown" required>
+                <% chambres.forEach(chambre => { %>
+                    <option value="<%= chambre.id %>"
+                        <%= chambre.id === reservation.chambre_id ? 'selected' : '' %>>
+                        Chambre <%= chambre.numero %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+
+        <!-- Dates -->
         
-        <!-- Affichage des erreurs -->
-        <% if (locals.errors && errors.length > 0) { %>
-            <div class="ui error message">
-                <div class="header">Erreurs :</div>
-                <ul class="list">
-                    <% errors.forEach(function(error) { %>
-                        <li><%= error.msg %></li>
-                    <% }); %>
-                </ul>
+            <div class="field">
+                <label>Date d'arrivée</label>
+                <input type="date" name="date_arrivee"
+                    value="<%= reservation.date_arrivee.toISOString().split('T')[0] %>"
+                    required>
             </div>
-        <% } %>
+
+            <div class="field">
+                <label>Date de départ</label>
+                <input type="date" name="date_depart"
+                    value="<%= reservation.date_depart.toISOString().split('T')[0] %>"
+                    required>
+            </div>
         
-        <!-- Formulaire -->
-        <form class="ui form" method="POST" action="/reservations/<%= reservation.id %>?_method=PUT">
-            <div class="field">
-                <label>Nom du client</label>
-                <input type="text" name="nom" placeholder="Pierre Duroc" required>
-            </div>
 
-            <div class="field">
-                <label>ID de la chambre</label>
-                <input type="number" name="numero" placeholder="101" min="1" required>
-            </div>
+        <button class="ui primary button" type="submit">
+            <i class="save icon"></i>
+            Mettre à jour
+        </button>
 
-            <div class="field">
-                <label>Date d'arrivée du client</label>
-                <input type="date" name="date_arrivee" placeholder="12/12/12" required>
-            </div>
-
-            <div class="field">
-                <label>Date de départ du client</label>
-                <input type="date" name="date_depart" placeholder="12/12/12" required>
-            </div>
-            <button type="submit" class="ui primary button">
-                <i class="save icon"></i>
-                Mettre à jour
-            </button>
-            <a href="/reservations" class="ui button">
-                <i class="cancel icon"></i>
-                Annuler
-            </a>
-        </form>
-    </div>
+        <a href="/reservations" class="ui button">
+            Annuler
+        </a>
+    </form>
+</div>
 </body>
 </html>

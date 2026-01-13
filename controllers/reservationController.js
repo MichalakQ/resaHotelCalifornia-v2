@@ -107,21 +107,23 @@ class ReservationController {
     
     // Afficher le formulaire d'édition
     static async edit(req, res) {
-        console.log(' ReservationController.edit() appelé pour ID:', req.params.id);
         try {
             const reservation = await Reservation.findById(req.params.id);
             if (!reservation) {
-                console.log(' Reservation non trouvée, redirection');
                 return res.redirect('/reservations');
             }
-            console.log(' Reservation trouvée:', reservation);
+    
+            const clients = await Client.findAll();
+            const chambres = await Chambre.findAll();
+    
             res.render('Reservation/edit', {
                 title: 'Modifier la Réservation',
-                reservation: reservation,
+                reservation,
+                clients,
+                chambres,
                 errors: []
             });
         } catch (error) {
-            console.error(' Erreur edit:', error.message);
             res.redirect('/reservations');
         }
     }
