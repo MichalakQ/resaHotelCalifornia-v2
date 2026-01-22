@@ -1,87 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer la chambre</title>
     <link rel="stylesheet" href="/semantic-ui/semantic.min.css">
-    <link rel="icon" href="data:,">
-    <title><%= title %></title>
 </head>
 
 <body>
-    <div class="ui container" style="margin-top: 2rem;">
-        <h1 class="ui red header">
-            <i class="warning sign icon"></i>
-            <div class="content">
-                Supprimer la Chambre
-            </div>
-        </h1>
+<div class="ui container" style="margin-top:2rem;">
 
-        <!-- Message d'avertissement -->
-        <div class="ui warning message">
-            <div class="header">
-                Attention !
-            </div>
-            <p>Vous êtes sur le point de supprimer définitivement cette chambre. Cette action est irréversible.</p>
+    <h1 class="ui red header">
+        <i class="warning sign icon"></i>
+        <div class="content">
+            Supprimer la chambre
         </div>
+    </h1>
 
-        <!-- Informations de la chambre à supprimer -->
-        <div class="ui segment">
-            <h3 class="ui header">Détails de la chambre</h3>
-            <table class="ui definition table">
-                <tbody>
-                    <tr>
-                        <td class="collapsing">Numéro</td>
-                        <td><strong><%= chambre.numero %></strong></td>
-                    </tr>
-                    <tr>
-                        <td>Capacité</td>
-                        <td><%= chambre.capacite %> personne(s)</td>
-                    </tr>
-                    <% if (chambre.type) { %>
-                    <tr>
-                        <td>Type</td>
-                        <td><%= chambre.type %></td>
-                    </tr>
-                    <% } %>
-                    <% if (chambre.prix) { %>
-                    <tr>
-                        <td>Prix</td>
-                        <td><%= chambre.prix %> €</td>
-                    </tr>
-                    <% } %>
-                    <tr>
-                        <td>Disponibilité</td>
-                        <td>
-                            <% if (chambre.disponible) { %>
-                                <span class="ui green label">Disponible</span>
-                            <% } else { %>
-                                <span class="ui red label">Occupée</span>
-                            <% } %>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Formulaire de confirmation -->
-        <form class="ui form" method="POST" action="/chambres/<%= chambre.id %>?_method=DELETE">
-            <div class="ui buttons">
-                <a href="/chambres" class="ui button">
-                    <i class="cancel icon"></i>
-                    Annuler
-                </a>
-                <div class="or" data-text="ou"></div>
-                <button type="submit" class="ui negative button">
-                    <i class="trash icon"></i>
-                    Confirmer la suppression
-                </button>
-            </div>
-        </form>
+    <!-- Avertissement -->
+    <div class="ui warning message">
+        <div class="header">Attention</div>
+        <p>
+            Vous êtes sur le point de supprimer définitivement cette chambre.
+            Cette action est <strong>irréversible</strong>.
+        </p>
     </div>
 
-    <script src="/semantic-ui/semantic.min.js"></script>
-</body>
+    <!-- Détails de la chambre à supprimer -->
+    <div class="ui segment">
+        <h3 class="ui header">Détails de la chambre</h3>
 
+        <table class="ui definition table">
+            <tbody>
+                <tr>
+                    <td class="collapsing">Numéro</td>
+                    <td><strong><%= chambre.numero %></strong></td>
+                </tr>
+                <tr>
+                    <td>Capacité</td>
+                    <td><%= chambre.capacite %> personne(s)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulaire de confirmation -->
+    <form method="POST" action="/chambres/<%= chambre.id %>/delete">
+        <div class="ui buttons">
+            <a href="/chambres" class="ui button">
+                <i class="cancel icon"></i>
+                Annuler
+            </a>
+            <div class="or" data-text="ou"></div>
+            <button type="submit" class="ui negative button">
+                <i class="trash icon"></i>
+                Confirmer la suppression
+            </button>
+        </div>
+    </form>
+
+</div>
+</body>
 </html>
