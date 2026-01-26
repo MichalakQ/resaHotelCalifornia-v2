@@ -12,7 +12,69 @@ class Reservation {
         this.date_depart = new Date(data.date_depart);
     }
 
-    // Récupérer toutes les réservations
+    // ✅ Méthode de validation centralisée
+    static validateReservationData(data, isUpdate = false) {
+        const errors = [];
+
+        // Validation client_id
+        if (data.client_id === undefined || data.client_id === null) {
+            errors.push('client_id est requis');
+        } else if (!Number.isInteger(Number(data.client_id)) || Number(data.client_id) <= 0) {
+            errors.push('client_id doit être un entier positif');
+        }
+
+        // Validation chambre_id
+        if (data.chambre_id === undefined || data.chambre_id === null) {
+            errors.push('chambre_id est requis');
+        } else if (!Number.isInteger(Number(data.chambre_id)) || Number(data.chambre_id) <= 0) {
+            errors.push('chambre_id doit être un entier positif');
+        }
+
+        // Validation des dates
+        if (!data.date_arrivee) {
+            errors.push('date_arrivee est requise');
+        } else if (!validator.isISO8601(String(data.date_arrivee))) {
+            errors.push('date_arrivee doit être une date valide (format ISO8601)');
+        }
+
+        if (!data.date_depart) {
+            errors.push('date_depart est requise');
+        } else if (!validator.isISO8601(String(data.date_depart))) {
+            errors.push('date_depart doit être une date valide (format ISO8601)');
+        }
+
+        // Vérifier que date_depart > date_arrivee
+        if (data.date_arrivee && data.date_depart) {
+            const arrivee = new Date(data.date_arrivee);
+            const depart = new Date(data.date_depart);
+            if (depart <= arrivee) {
+                errors.push('La date de départ doit être postérieure à la date d\'arrivée');
+            }
+        }
+
+        if (errors.length > 0) {
+            throw new Error(`Validation échouée: ${errors.join(', ')}`);
+        }
+
+        // Retourne les données nettoyées
+        return {
+            client_id: Number(data.client_id),
+            chambre_id: Number(data.chambre_id),
+            date_arrivee: new Date(data.date_arrivee).toISOString().split('T')[0],
+            date_depart: new Date(data.date_depart).toISOString().split('T')[0]
+        };
+    }
+
+    // ✅ Validation d'ID
+    static validateId(id) {
+        const numId = Number(id);
+        if (!Number.isInteger(numId) || numId <= 0) {
+            throw new Error('ID invalide: doit être un entier positif');
+        }
+        return numId;
+    }
+
+    // Récupérer toutes les réservations (pas de paramètres = OK)
     static async findAll() {
         try {
             const [rows] = await db.execute(`
@@ -29,93 +91,134 @@ class Reservation {
                 JOIN chambres c ON r.chambre_id = c.id
                 ORDER BY c.numero, s.nom
             `);
-    
             return rows.map(row => new Reservation(row));
         } catch (error) {
-            throw new Error(
-                'Erreur lors de la récupération des réservations: ' + error.message
-            );
+            throw new Error('Erreur lors de la récupération des réservations');
         }
     }
 
-    // Récupérer une réservation par ID
+    // ✅ Avec validation
     static async findById(id) {
         try {
-            const [rows] = await db.execute('SELECT r.id , nom , numero , client_id , chambre_id , date_arrivee , date_depart FROM reservations r , chambres c , clients s WHERE r.client_id = s.id AND r.chambre_id = c.id AND r.id = ?', [id]);
+            const validId = this.validateId(id);
+            
+            const [rows] = await db.execute(`
+                SELECT r.id, nom, numero, client_id, chambre_id, date_arrivee, date_depart 
+                FROM reservations r 
+                JOIN chambres c ON r.chambre_id = c.id 
+                JOIN clients s ON r.client_id = s.id 
+                WHERE r.id = ?`, 
+                [validId]
+            );
             return rows.length > 0 ? new Reservation(rows[0]) : null;
         } catch (error) {
             throw new Error('Erreur lors de la récupération de la réservation: ' + error.message);
         }
     }
 
-    // Créer une nouvelle réservation
+    // ✅ Avec validation complète
     static async create(reservationData) {
         try {
+            // Validation et nettoyage des données
+            const cleanData = this.validateReservationData(reservationData);
+
+            // Vérifier la disponibilité de la chambre
+            const isAvailable = await this.isRoomAvailable(
+                cleanData.chambre_id, 
+                cleanData.date_arrivee, 
+                cleanData.date_depart
+            );
+            
+            if (!isAvailable) {
+                throw new Error('La chambre n\'est pas disponible pour cette période');
+            }
+
             const [result] = await db.execute(
                 'INSERT INTO reservations (client_id, chambre_id, date_arrivee, date_depart) VALUES (?, ?, ?, ?)',
-                [reservationData.client_id, reservationData.chambre_id, reservationData.date_arrivee, reservationData.date_depart]
+                [cleanData.client_id, cleanData.chambre_id, cleanData.date_arrivee, cleanData.date_depart]
             );
             return result.insertId;
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
                 throw new Error('Cette réservation existe déjà');
             }
+            if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+                throw new Error('Client ou chambre inexistant');
+            }
             throw new Error('Erreur lors de la création de la réservation: ' + error.message);
         }
     }
 
-    // Mettre à jour une réservation
+    // ✅ Avec validation complète
     async update(reservationData) {
         try {
-            await db.execute(
-                'UPDATE reservations SET client_id = ?, chambre_id = ?, date_arrivee = ?, date_depart = ? WHERE id = ?',
-                [reservationData.client_id, reservationData.chambre_id, reservationData.date_arrivee, reservationData.date_depart, this.id]
+            const cleanData = Reservation.validateReservationData(reservationData);
+
+            // Vérifier la disponibilité (en excluant cette réservation)
+            const isAvailable = await Reservation.isRoomAvailable(
+                cleanData.chambre_id, 
+                cleanData.date_arrivee, 
+                cleanData.date_depart,
+                this.id
             );
             
-            this.client_id = reservationData.client_id;
-            this.chambre_id = reservationData.chambre_id;
-            this.date_arrivee = reservationData.date_arrivee;
-            this.date_depart = reservationData.date_depart;
+            if (!isAvailable) {
+                throw new Error('La chambre n\'est pas disponible pour cette période');
+            }
+
+            await db.execute(
+                'UPDATE reservations SET client_id = ?, chambre_id = ?, date_arrivee = ?, date_depart = ? WHERE id = ?',
+                [cleanData.client_id, cleanData.chambre_id, cleanData.date_arrivee, cleanData.date_depart, this.id]
+            );
+
+            Object.assign(this, cleanData);
             return true;
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
                 throw new Error('Cette réservation existe déjà');
             }
-            throw new Error('Erreur lors de la mise à jour de la réservation: ' + error.message);
+            throw new Error('Erreur lors de la mise à jour: ' + error.message);
         }
     }
 
-    // Supprimer une réservation
+    // ✅ Avec validation
     static async delete(id) {
         try {
-            await db.execute('DELETE FROM reservations WHERE id = ?', [id]);
+            const validId = this.validateId(id);
+            const [result] = await db.execute('DELETE FROM reservations WHERE id = ?', [validId]);
+            
+            if (result.affectedRows === 0) {
+                throw new Error('Réservation non trouvée');
+            }
             return true;
         } catch (error) {
-            throw new Error('Erreur lors de la suppression de la réservation: ' + error.message);
+            throw new Error('Erreur lors de la suppression: ' + error.message);
         }
     }
 
-    // Vérifier si une chambre est disponible pour une période donnée
+    // ✅ Corrigé: nom de table "reservations" (pas "reservation")
     static async isRoomAvailable(chambre_id, date_arrivee, date_depart, excludeReservationId = null) {
         try {
+            const validChambreId = this.validateId(chambre_id);
+            
             let query = `
                 SELECT COUNT(*) as count 
-                FROM reservation
+                FROM reservations
                 WHERE chambre_id = ?
                 AND (
-                    (date_arrivee <= ? AND date_depart >= ?)
-                    OR (date_arrivee <= ? AND date_depart >= ?)
+                    (date_arrivee <= ? AND date_depart > ?)
+                    OR (date_arrivee < ? AND date_depart >= ?)
                     OR (date_arrivee >= ? AND date_depart <= ?)
                 )
             `;
-            let params = [chambre_id, date_arrivee, date_arrivee, date_depart, date_depart, date_arrivee, date_depart];
-            
-            // Exclure une réservation spécifique (utile lors de la modification)
+            let params = [validChambreId, date_arrivee, date_arrivee, date_depart, date_depart, date_arrivee, date_depart];
+
             if (excludeReservationId) {
+                const validExcludeId = this.validateId(excludeReservationId);
                 query += ' AND id != ?';
-                params.push(excludeReservationId);
+                params.push(validExcludeId);
             }
-            
+
             const [rows] = await db.execute(query, params);
             return rows[0].count === 0;
         } catch (error) {
@@ -123,29 +226,29 @@ class Reservation {
         }
     }
 
-    // Récupérer les réservations d'un client
     static async findByClientId(clientId) {
         try {
+            const validId = this.validateId(clientId);
             const [rows] = await db.execute(
                 'SELECT * FROM reservations WHERE client_id = ? ORDER BY date_arrivee DESC',
-                [clientId]
+                [validId]
             );
             return rows.map(row => new Reservation(row));
         } catch (error) {
-            throw new Error('Erreur lors de la récupération des réservations du client: ' + error.message);
+            throw new Error('Erreur lors de la récupération: ' + error.message);
         }
     }
 
-    // Récupérer les réservations d'une chambre
     static async findByChambreId(chambreId) {
         try {
+            const validId = this.validateId(chambreId);
             const [rows] = await db.execute(
                 'SELECT * FROM reservations WHERE chambre_id = ? ORDER BY date_arrivee DESC',
-                [chambreId]
+                [validId]
             );
             return rows.map(row => new Reservation(row));
         } catch (error) {
-            throw new Error('Erreur lors de la récupération des réservations de la chambre: ' + error.message);
+            throw new Error('Erreur lors de la récupération: ' + error.message);
         }
     }
 }
