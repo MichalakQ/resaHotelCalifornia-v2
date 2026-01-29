@@ -1,4 +1,5 @@
 import db from './connexion.js';
+import validator from 'validator';
 
 class Reservation {
     constructor(data) {
