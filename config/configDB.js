@@ -7,8 +7,8 @@ async function openDatabaseConnection() {
     // Configuration de la connexion (équivalent des variables PHP)
     const host = 'localhost';
     const database = 'resaHotelCalifornia';
-    const user = 'username';
-    const password = 'password';
+    const user = 'root';
+    const password = '';
 
     try {
         // Création de la connexion 
