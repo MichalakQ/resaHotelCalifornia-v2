@@ -89,7 +89,3 @@ https.createServer(sslOptions, app).listen(PORT_HTTPS, () => {
     console.log(`🔒 Serveur HTTPS démarré sur https://localhost:${PORT_HTTPS}`);
 });
 
-app.listen(PORT, () => {
-  console.log(`Serveur démarré sur http://localhost:${PORT}`);
-//          
-});
